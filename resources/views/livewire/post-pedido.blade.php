@@ -521,7 +521,7 @@
     </x-slot>
 
     <x-slot name="footer">
-        <button type="button" class="btn btn-secondary" wire:click="cancelarDetalleEdit">
+        <button type="button" class="btn btn-secondary" wire:click="cancelarMostrarRecepcion">
             {{ __('Cerrar') }}
         </button>
     </x-slot>

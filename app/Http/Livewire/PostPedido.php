@@ -275,6 +275,14 @@ class PostPedido extends Component
         $this->reset([
             'cantidadRecibida', 
         ]);
+        $this->confirmingDetalleEdit = false; 
+    }
+
+    //Funcion para cancelar al entrar al modal Recepcion de Factura
+    public function cancelarMostrarRecepcion() {
+        $this->reset([
+            'cantidadRecibida', 
+        ]);
         $this->confirmingMostrarRecepcion = false; 
     }
 
@@ -549,7 +557,7 @@ class PostPedido extends Component
         $this->fechaBordado = Carbon::now()->format('Y-m-d');
 
         $facturas = RecepcionCabecera::select('recepcion_cabeceras.*')
-                                     ->orderBy($this->sortBy, $this->sortAsc ?  'ASC' : 'DESC');
+                    ->orderBy($this->sortBy, $this->sortAsc ?  'ASC' : 'DESC');
 
         $fecha = Carbon::createFromFormat('Y-m-d', $this->fecha);    
         $fechaFinal = $fecha->subMonths(3);
