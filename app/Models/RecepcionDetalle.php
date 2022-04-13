@@ -14,7 +14,7 @@ class RecepcionDetalle extends Model
 
 
     //para metodos CRUD 
-    protected $fillable = ['FK_RecepcionCabecera', 'FK_Pedido', 'TipoPrenda', 'CodigoModelo', 'Talla', 'Color', 'CantidadSolicitada', 'CantidadRecibida', 'CantidadFaltante', 'Estado', 'FK_DocumentoExterno'];
+    protected $fillable = ['FK_RecepcionCabecera', 'FK_Pedido', 'TipoPrenda', 'CodigoModelo', 'Talla', 'Color', 'CantidadSolicitada', 'CantidadRecibida', 'CantidadFaltante', 'CantidadSolicitadaAnterior', 'CantidadRecibidaAnterior', 'CantidadFaltanteAnterior', 'Estado', 'FK_DocumentoExterno'];
     protected $dates = ['created_at', 'updated_at', 'FechaRecepcion', 'FechaDocumentoExterno'];
 
     public function recepcionCabeceras() {

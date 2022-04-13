@@ -331,7 +331,7 @@
                                         <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
                                     </a>
                                     @if ($sumatoria['id1'] != "null")                                        
-                                    <a wire:click="confirmMostrarRecepcion( {{ $key }} )" title="Mostrar recepción anterior" style="cursor:pointer">
+                                    <a wire:click="confirmMostrarRecepcion( {{$sumatoria['id']}} )" title="Mostrar recepción anterior" style="cursor:pointer">
                                         <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
                                     </a>   
                                     @endif   
@@ -498,22 +498,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($listaSumatoria as $key => $sumatoria)
-                                @if ($sumatoria != null)
-                                    
-
+                                @if ($listaAnterior != null)
                                 <tr >
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>                                        
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['tipoPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['modCodigo']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['tallajeTalla']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['colorPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['cantidadSolicitadaAnterior']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['cantidadRecibidaAnterior']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$listaAnterior['cantidadFaltanteAnterior']}}</td>                                        
                                 </tr>
-                                @endif                           
-                                @endforeach
-
+                                @endif
                             </tbody>
                         </table>
                     </div>

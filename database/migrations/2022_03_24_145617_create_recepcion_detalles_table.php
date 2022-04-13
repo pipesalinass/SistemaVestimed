@@ -27,6 +27,9 @@ class CreateRecepcionDetallesTable extends Migration
             $table->integer('CantidadSolicitada');
             $table->integer('CantidadRecibida');
             $table->integer('CantidadFaltante');
+            $table->integer('CantidadSolicitadaAnterior');
+            $table->integer('CantidadRecibidaAnterior');
+            $table->integer('CantidadFaltanteAnterior');
             $table->string('Estado',50);
             $table->timestamps();
         });

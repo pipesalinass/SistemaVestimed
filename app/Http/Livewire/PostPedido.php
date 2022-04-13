@@ -67,6 +67,12 @@ class PostPedido extends Component
     public $FK_Pedido;
     public $FK_RecepcionCabecera;
 
+    /**Variables iniciales mostrar recepcion anterior */
+    public $cantidadAnteriorSolicitada;
+    public $cantidadAnteriorRecibida;
+    public $cantidadAnteriorFaltante;
+    public $listaAnterior = [];
+
     /**Variables iniciales bordado */
     public $fechaBordado;
     public $pedidoAsociadoBordado;
@@ -265,6 +271,18 @@ class PostPedido extends Component
     public function confirmMostrarRecepcion($id) {
         $this->confirmingMostrarRecepcion = true;
         $this->idRecepcionDetalle = $id;
+
+        $detalle = RecepcionDetalle::where('RecepcionDetalleId','=',$this->idRecepcionDetalle)->first();
+
+        $this->listaAnterior['tipoPrenda'] = $detalle->TipoPrenda;
+        $this->listaAnterior['modCodigo'] = $detalle->CodigoModelo;
+        $this->listaAnterior['tallajeTalla'] = $detalle->Talla;
+        $this->listaAnterior['colorPrenda'] = $detalle->Color;
+
+        $this->listaAnterior['cantidadSolicitadaAnterior'] = $detalle->CantidadSolicitadaAnterior;
+        $this->listaAnterior['cantidadRecibidaAnterior'] = $detalle->CantidadRecibidaAnterior;
+        $this->listaAnterior['cantidadFaltanteAnterior'] = $detalle->CantidadFaltanteAnterior;
+
     }
 
     //Funcion para cancelar al entrar al modal Recepcion de Factura
@@ -360,6 +378,10 @@ class PostPedido extends Component
             $a['cantidadRecibida'] = 0;
             $a['cantidadFaltante'] = $item->suma - $a['cantidadRecibida'];
 
+            $a['cantidadSolicitadaAnterior'] = 0; 
+            $a['cantidadRecibidaAnterior'] = 0;
+            $a['cantidadFaltanteAnterior'] = 0;
+
             $this->listaSumatoria[] = $a;
             }     
         } else {
@@ -385,9 +407,14 @@ class PostPedido extends Component
                 $a['cantidadRecibida'] = 0;
                 $a['cantidadFaltante'] = $item->CantidadFaltante - $a['cantidadRecibida'];
 
+                $a['cantidadSolicitadaAnterior'] =0; 
+                $a['cantidadRecibidaAnterior'] = 0;
+                $a['cantidadFaltanteAnterior'] = 0;
+
             $this->listaSumatoria[] = $a;
                 }                 
             }
+
         }
 
         $this->estadoBotonGuardarCabeceraRecepcion = 1;
@@ -417,6 +444,9 @@ class PostPedido extends Component
                         'CantidadSolicitada'            => $item['sumatoria'],
                         'CantidadRecibida'              => $item['cantidadRecibida'],
                         'CantidadFaltante'              => $item['cantidadFaltante'],
+                        'CantidadSolicitadaAnterior'    => $item['cantidadSolicitadaAnterior'],
+                        'CantidadRecibidaAnterior'      => $item['cantidadRecibidaAnterior'],
+                        'CantidadFaltanteAnterior'      => $item['cantidadFaltanteAnterior'],
                         'Estado'                        => "SIN RECEPCION",
                         'FK_DocumentoExterno'           => $this->pedidoAsociado,
                     ]);
@@ -432,6 +462,9 @@ class PostPedido extends Component
                             'CantidadSolicitada'            => $item['sumatoria'],
                             'CantidadRecibida'              => $item['cantidadRecibida'],
                             'CantidadFaltante'              => $item['cantidadFaltante'],
+                            'CantidadSolicitadaAnterior'    => $item['cantidadSolicitadaAnterior'],
+                            'CantidadRecibidaAnterior'      => $item['cantidadRecibidaAnterior'],
+                            'CantidadFaltanteAnterior'      => $item['cantidadFaltanteAnterior'],
                             'Estado'                        => "RECEPCION_FINALIZADA",
                             'FK_DocumentoExterno'           => $this->pedidoAsociado,
                         ]);
@@ -447,6 +480,9 @@ class PostPedido extends Component
                                 'CantidadSolicitada'            => $item['sumatoria'],
                                 'CantidadRecibida'              => $item['cantidadRecibida'],
                                 'CantidadFaltante'              => $item['cantidadFaltante'],
+                                'CantidadSolicitadaAnterior'    => $item['cantidadSolicitadaAnterior'],
+                                'CantidadRecibidaAnterior'      => $item['cantidadRecibidaAnterior'],
+                                'CantidadFaltanteAnterior'      => $item['cantidadFaltanteAnterior'],
                                 'Estado'                        => "RECEPCION_PARCIAL",
                                 'FK_DocumentoExterno'           => $this->pedidoAsociado,
                             ]);
@@ -471,6 +507,9 @@ class PostPedido extends Component
                         'CantidadSolicitada'            => $item['sumatoria'],
                         'CantidadRecibida'              => $item['cantidadRecibida'],
                         'CantidadFaltante'              => $item['cantidadFaltante'],
+                        'CantidadSolicitadaAnterior'    => $item['cantidadSolicitadaAnterior'],
+                        'CantidadRecibidaAnterior'      => $item['cantidadRecibidaAnterior'],
+                        'CantidadFaltanteAnterior'      => $item['cantidadFaltanteAnterior'],
                         'Estado'                        => "SIN RECEPCION",
                         'FK_DocumentoExterno'           => $this->pedidoAsociado,
                     ]);
@@ -486,6 +525,9 @@ class PostPedido extends Component
                             'CantidadSolicitada'            => $item['sumatoria'],
                             'CantidadRecibida'              => $item['cantidadRecibida'],
                             'CantidadFaltante'              => $item['cantidadFaltante'],
+                            'CantidadSolicitadaAnterior'    => $item['cantidadSolicitadaAnterior'],
+                            'CantidadRecibidaAnterior'      => $item['cantidadRecibidaAnterior'],
+                            'CantidadFaltanteAnterior'      => $item['cantidadFaltanteAnterior'],
                             'Estado'                        => "RECEPCION_FINALIZADA",
                             'FK_DocumentoExterno'           => $this->pedidoAsociado,
                         ]);   
@@ -501,6 +543,9 @@ class PostPedido extends Component
                                 'CantidadSolicitada'            => $item['sumatoria'],
                                 'CantidadRecibida'              => $item['cantidadRecibida'],
                                 'CantidadFaltante'              => $item['cantidadFaltante'],
+                                'CantidadSolicitadaAnterior'    => $item['cantidadSolicitadaAnterior'],
+                                'CantidadRecibidaAnterior'      => $item['cantidadRecibidaAnterior'],
+                                'CantidadFaltanteAnterior'      => $item['cantidadFaltanteAnterior'],
                                 'Estado'                        => "RECEPCION_PARCIAL",
                                 'FK_DocumentoExterno'           => $this->pedidoAsociado,
                             ]);
@@ -544,6 +589,11 @@ class PostPedido extends Component
             $this->validateOnly('cantidadRecibida');
             $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadRecibida'] = $this->cantidadRecibida;
             $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadFaltante'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'] - $this->cantidadRecibida;
+
+            $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadSolicitadaAnterior'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'];
+            $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadRecibidaAnterior'] = $this->cantidadRecibida;
+            $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadFaltanteAnterior'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'] - $this->cantidadRecibida;
+           
             $this->reset([
                 'cantidadRecibida',
             ]);
@@ -622,6 +672,7 @@ class PostPedido extends Component
             'pedidosAsociadosBordado'       => $pedidosAsociadosBordado,
             'listaSumatoria'                => $this->listaSumatoria,
             'listaSumatoriaBordado'         => $this->listaSumatoriaBordado,
+            'listaAnterior'                 => $this->listaAnterior,
             'recepcionDetalle'              => $recepcionDetalle,
 
         ]);
