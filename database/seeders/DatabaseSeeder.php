@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UniversidadSeeder::class,
             TallaSeeder::class,
             TipoPrendaSeeder::class,
+            PermisosSeeder::class,
         ]);
     }
 }
