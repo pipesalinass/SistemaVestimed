@@ -171,6 +171,18 @@ $(document).ready(function(){
     });
 });
 
+$(document).ready(function(){
+    window.addEventListener('abrirMsjeFallido11', event => {
+        document.getElementById("mensajeCrudErrorPersonas11").textContent  = event.detail.error; 
+        document.getElementById("alertaCrudErrorPersonas11").style.display = "block";
+    })
+    $(document).on('click', '#cerrarAlertCrudErrorPersonas11', function(e){
+        e.preventDefault();
+        document.getElementById("mensajeCrudErrorPersonas11").textContent  = ''; 
+        document.getElementById("alertaCrudErrorPersonas11").style.display = "none";
+    });
+});
+
 // get elements
 var parent = document.querySelector('.parent');
 var column = document.querySelector('.column');

@@ -241,7 +241,7 @@ class PostPedido extends Component
     public function updatedCantidadRecibida($cantidadRecibida_form) {
         $this->validateOnly("cantidadRecibida");
     }
-   
+
     //Funciones para crear una Recepcion de Factura (PostPedido)
     public function confirmPostPedidoAdd() {
 
@@ -275,7 +275,7 @@ class PostPedido extends Component
         $this->reset([
             'cantidadRecibida', 
         ]);
-        $this->confirmingDetalleEdit = false; 
+        $this->confirmingMostrarRecepcion = false; 
     }
 
     public function confirmRecepcionDetalle($id) {
@@ -289,6 +289,7 @@ class PostPedido extends Component
     }
 
     public function confirmInsertarCantidad($id) {
+        $this->resetErrorBag();
         $this->confirmingDetalleEdit = true;
         $this->idRecepcionDetalle = $id;
     }
@@ -524,13 +525,18 @@ class PostPedido extends Component
     }
 
     public function detalleEdit() {
-        $this->validateOnly('cantidadRecibida');
-        $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadRecibida'] = $this->cantidadRecibida;
-        $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadFaltante'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'] - $this->cantidadRecibida;
-        $this->reset([
-            'cantidadRecibida',
-        ]);
-        $this->confirmingDetalleEdit = false;
+        if(($this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'] - $this->cantidadRecibida)<0){
+            $errorCode = 'La cantidad recibida no puede ser mayor que la cantidad solicitada';
+            $this->dispatchBrowserEvent('abrirMsjeFallido11', ['error' => $errorCode]);
+        }else{
+            $this->validateOnly('cantidadRecibida');
+            $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadRecibida'] = $this->cantidadRecibida;
+            $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadFaltante'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'] - $this->cantidadRecibida;
+            $this->reset([
+                'cantidadRecibida',
+            ]);
+            $this->confirmingDetalleEdit = false;
+        }
     }
 
     public function confirmBordadoAdd() {

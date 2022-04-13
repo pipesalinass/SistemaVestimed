@@ -14,51 +14,45 @@
                         <div class="col-sm-4 mb-2">
                             <h1 class="m-0">Gestión de Post Pedidos</h1>
                         </div><!-- /.col -->
-                        <div class="col-xs-4 col-sm-3 col-md-4 col-lg-4">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
+                        <div class="col-sm-8">
+                            <div class="row" style="display: flex; justify-content: flex-end;">
+                                <div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </span>
+                                            </div>
+                                            <input wire:model="fecha"type="date" class="form-control float-right" id="fecPrincipal">
+                                        </div>
+                                        <!-- /.input group -->
                                     </div>
-                                    <input wire:model="fecha"type="date" class="form-control float-right" id="fecPrincipal">
                                 </div>
-                                <!-- /.input group -->
-                            </div>
-                        </div>
-                            <!-- Cambio, saca right -->
-                                <div class="d-flex">
-                                    
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
                                     @can('Hacer pedidos')
                                     <button type="button" class="btn btn-outline-primary btn-block waves-effect px-3"
                                         wire:click="confirmPostPedidoAdd">
-                                        <i class=" fas fa-plus pr-3 pl-3"></i><span>Nuevo</span>
+                                        <i class=" fas fa-plus pr-2"></i><span>Nuevo</span>
                                     </button>
                                     @endcan
-
-                            <!-- Cambio, saca right -->
-                                
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
                                     @can('Hacer pedidos')
                                     <button type="button" class="btn btn-outline-primary btn-block waves-effect px-3"
                                         wire:click="confirmBordadoAdd">
-                                        <i class=" fas fa-plus pr-6 pl-6"></i><span>Bordado</span>
+                                        <i class=" fas fa-plus pr-2"></i><span>Bordado</span>
                                     </button>
                                     @endcan
-                          
-                               
-                                <!-- /.col -->
-                                <!-- Cambio, saca right -->
-                               
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-1 col-lg-1">
                                     <button type="button" class="btn btn-outline-primary"
-                                        wire:click="refrescar">
-                                        <i class="fas fa-redo"></i>
-                                    </button>   
-                                    
-                                </div>                               
-                           
-                               
-                                <!-- /.col -->
+                                    wire:click="refrescar">
+                                    <i class="fas fa-redo"></i>
+                                </button>   
+                                </div>
+                            </div>
+                        </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
@@ -439,20 +433,31 @@
                 <fieldset class="form-group border p-3 scheduler-border">
                     <legend class="w-auto px-2">Información Cantidad</legend>
                     <!-- Fecha Ingreso -->
-        
                     <div class="form-row">
-                        <div class="form-group col md-6">
-                            <label for="cantidad">Cantidad Recibida:</label>
-                            <input type="number" min="0" max="999" class="form-control" id="cantidad"
-                                wire:model="cantidadRecibida">
-                                @error('cantidadRecibida')
-                                <div class="text-danger">
-                                    <strong>Wow!</strong> <span id="mensajeCrudCantidadRecibida">{{$message}}</span>
-                                </div>
-                                @enderror  
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="cantidad">Cantidad Recibida:</label>
+                                <input type="number" min="0" max="999" class="form-control" id="cantidad"
+                                    wire:model="cantidadRecibida">
+                                    @error('cantidadRecibida')
+                                    <div class="text-danger">
+                                        <strong>Wow!</strong> <span id="mensajeCrudCantidadRecibida">{{$message}}</span>
+                                    </div>
+                                    @enderror  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
+                            role="alert" id="alertaCrudErrorPersonas11" style="display: none;">
+                            <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas11"></span>
+                            <button type="button" class="close" aria-label="Close" id="cerrarAlertCrudErrorPersonas11">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     </div>
                 </fieldset>
+
     </x-slot>
 
     <x-slot name="footer">
@@ -478,60 +483,46 @@
                 <fieldset class="form-group border p-3 scheduler-border">
                     <legend class="w-auto px-2">Información Recepción Anterior</legend>
                     <!-- Fecha Ingreso -->
-                    <table class="table table-hover text-nowrap">
-                        <thead>
-                            <legend class="w-auto px-2">Prendas</legend>
-                            <tr>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Cantidad Solicitada</th>
-                                <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Recibida</th>
-                                <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Faltante</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($listaSumatoria as $key => $sumatoria)
-                            @if ($sumatoria != null)
-                                
-
-                            <tr >
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">
-                                    <a wire:click="confirmInsertarCantidad( {{ $key }} )" title="Insertar cantidad recibida" style="cursor:pointer">
-                                        <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
-                                    </a>
-                                    @if ($sumatoria['id1'] != "null")                                        
-                                    <a wire:click="confirmMostrarRecepcion( {{ $key }} )" title="Mostrar recepción anterior" style="cursor:pointer">
-                                        <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
-                                    </a>   
-                                    @endif   
-                                </td>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <legend class="w-auto px-2">Prendas</legend>
+                                <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Cantidad Solicitada</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Recibida</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Faltante</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($listaSumatoria as $key => $sumatoria)
+                                @if ($sumatoria != null)
                                     
-                            </tr>
-                            @endif                           
-                            @endforeach
 
-                        </tbody>
-                    </table>
+                                <tr >
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>                                        
+                                </tr>
+                                @endif                           
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
                 </fieldset>
     </x-slot>
 
     <x-slot name="footer">
         <button type="button" class="btn btn-secondary" wire:click="cancelarDetalleEdit">
-            {{ __('Cancelar') }}
-        </button>
-
-        <button type="button" class="btn btn-primary" wire:click="detalleEdit">
-            {{ __('Guardar') }}
+            {{ __('Cerrar') }}
         </button>
     </x-slot>
 </x-dialog-modal-general>
@@ -591,7 +582,7 @@
             <!-- Información factura -->
             <!-- Table row -->
            <div class="row">
-                <div class="card-body table-responsive p-0"">
+                <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <legend class="w-auto px-2">Prendas</legend>
@@ -688,7 +679,7 @@
 
                         <!-- Table row -->
            <div class="row">
-            <div class="card-body table-responsive p-0"">
+            <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <legend class="w-auto px-2">Prendas</legend>
