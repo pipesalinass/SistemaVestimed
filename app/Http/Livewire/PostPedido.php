@@ -90,6 +90,8 @@ class PostPedido extends Component
 
     public $seleccionados;
 
+    public $estadoBotonGuardarCabeceraRecepcion = 0;
+
     protected $queryString = [
         'search',
         'sortBy' => ['except' => 'PedidoId'],
@@ -247,7 +249,7 @@ class PostPedido extends Component
 
         $this->tituloPedido = "";
         $this->descripcionPedido = "";
-        $this->reset(['pedido']);
+        $this->reset(['pedido','estadoBotonGuardarCabeceraRecepcion']);
         $this->confirmingPostPedidoAdd = true;
     }
 
@@ -387,6 +389,8 @@ class PostPedido extends Component
                 }                 
             }
         }
+
+        $this->estadoBotonGuardarCabeceraRecepcion = 1;
     }
 
     public function submitDetalle() {    

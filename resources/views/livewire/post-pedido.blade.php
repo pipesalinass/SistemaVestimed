@@ -283,7 +283,7 @@
                     </div>
                     <div class="form-group col-md-8 align-self-end d-flex align-items-center justify-content-center">
                         @can('Agregar modelos')                        
-                        <button wire:click="submitCabecera" type="button" class="form-control btn btn-primary">Guardar recepción</button>
+                        <button wire:click="submitCabecera" type="button" class="form-control btn btn-primary" {{ $this->estadoBotonGuardarCabeceraRecepcion? 'disabled' : 'enabled' }}>Guardar recepción</button>
                         @endcan
                     </div>
  
