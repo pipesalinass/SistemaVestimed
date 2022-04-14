@@ -474,7 +474,7 @@ class PostPedido extends Component
         $this->idRecepcionDetalle = $id;
     }
 
-    public function almacenartCabecera() {
+    public function almacenarCabecera() {
         
         if ($this->pedidoAsociado == null) {
             $errorCode = 'Debe seleccionar un pedido antes de continuar';
@@ -483,8 +483,10 @@ class PostPedido extends Component
 
         $this->reset('listaSumatoria','cantidadRecibidaActualizada');
         $this->validateOnly('pedidoAsociado');
-        $this->validateOnly('numeroFactura');
-        $this->validateOnly('observacionfactura');                  
+        $this->validateOnly('numeroFactura'); 
+        if($this->observacionfactura){
+            $this->validateOnly('observacionfactura');
+        }              
 
         $fk_pedido = ManPedidosExterno::select('FK_Pedido')
                                         ->where('NumPedidoExterno', '=', $this->pedidoAsociado)
@@ -569,6 +571,12 @@ class PostPedido extends Component
             $this->dispatchBrowserEvent('abrirMsjeFallido10', ['error' => $errorCode]);
         } else {               
     
+        $this->validateOnly('pedidoAsociado');
+        $this->validateOnly('numeroFactura'); 
+        if($this->observacionfactura){
+            $this->validateOnly('observacionfactura');
+        }
+        
         RecepcionCabecera::create([
             'FK_Pedido'                         => $this->FK_Pedido,
             'FechaRecepcion'                    => $this->todayDate,

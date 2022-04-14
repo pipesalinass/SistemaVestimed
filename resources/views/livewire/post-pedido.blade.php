@@ -59,38 +59,39 @@
         <section class="content mt-3 border-bottom border-success">
             <div class="container-fluid">
                 <!-- /.row -->
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-3">
+                <div class="row" style="display: flex;
+                justify-content: space-around;">
+                    <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
                                 id="borradorClick"
                                 wire:click="changeEstado('ESPERA DE PRENDAS')"><i class="far fa-file"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Espera de Prendas</span>
+                                <span class="info-box-text">Recepcion parcial</span>
                                 <span class="info-box-number" id="borradora">{{$espera_de_prendas}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-warning elevation-1 text-white" style="cursor:pointer"
                                 id="generadoClick"
                                 wire:click="changeEstado('EN BORDADO')"><i class="far fa-thumbs-up"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">En Bordado</span>
+                                <span class="info-box-text">Recepcion finalizada</span>
                                 <span class="info-box-number" id="generada">{{$en_bordado}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
                                 id="enTallajeClick"
                                 wire:click="changeEstado('RECIBE DE BORDADO')"><i class="far fa-file"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Recibe de Bordado</span>
+                                <span class="info-box-text">En bordado</span>
                                 <span class="info-box-number" id="enTallaje">{{$recibe_de_bordado}}</span>
                             </div>
                             <!-- /.info-box-content -->
@@ -98,7 +99,22 @@
                     </div>
                     <!-- fix for small devices only -->
                     <div class="clearfix hidden-md-up"></div>
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
+                                id="gestionPedidoClick"
+                                wire:click="changeEstado('ENTREGADO')"><i class="fas fa-cog"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Recibe de bordado</span>
+                                <span class="info-box-number" id="gestionPedido">{{$entregado}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+                    <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
                                 id="gestionPedidoClick"
@@ -277,7 +293,7 @@
                     </div>
                     <div class="form-group col-md-8 align-self-end d-flex align-items-center justify-content-center">
                         @can('Agregar modelos')                        
-                        <button wire:click="almacenartCabecera" type="button" class="form-control btn btn-primary" {{ $this->estadoBotonGuardarCabeceraRecepcion ? 'disabled' : 'enabled' }}>Continuar</button>
+                        <button wire:click="almacenarCabecera" type="button" class="form-control btn btn-primary" {{ $this->estadoBotonGuardarCabeceraRecepcion ? 'disabled' : 'enabled' }}>Continuar</button>
                         @endcan
                     </div>
  
