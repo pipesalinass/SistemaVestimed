@@ -386,7 +386,6 @@
                                 <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Recibida</th>
                                 <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Faltante</th>
                                 <th class="rounded border px-2 py-2" style="text-align: center">Estado</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -399,15 +398,8 @@
                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria->CantidadSolicitada}}</td>
                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria->CantidadRecibida}}</td>
                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria->CantidadFaltante}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria->Estado}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">
-                                    <a wire:click="confirmDetalleEdit( {{ $sumatoria->RecepcionDetalleId }} )" title="Editar Cantidad Recibida" style="cursor:pointer">
-                                        <i class="fas fa-edit" style="color:#0a6ed3" title="Editar Cantidad Recibida"></i>
-                                    </a>   
-                                </td>
-                                    
+                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria->Estado}}</td>                                    
                             </tr>
-                           
                             @endforeach
                         </tbody>
                     </table>
