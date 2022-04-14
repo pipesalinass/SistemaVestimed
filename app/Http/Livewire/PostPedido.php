@@ -370,9 +370,9 @@ class PostPedido extends Component
             $a['cantidadRecibida'] = 0;
             $a['cantidadFaltante'] = $item->suma - $a['cantidadRecibida'];
 
-            $a['cantidadSolicitadaAnterior'] = 0; 
+            $a['cantidadSolicitadaAnterior'] = $item->suma; 
             $a['cantidadRecibidaAnterior'] = 0;
-            $a['cantidadFaltanteAnterior'] = 0;
+            $a['cantidadFaltanteAnterior'] = $item->suma - $a['cantidadRecibida'];
 
             $this->listaSumatoria[] = $a;
             }     
@@ -399,9 +399,9 @@ class PostPedido extends Component
                 $a['cantidadRecibida'] = 0;
                 $a['cantidadFaltante'] = $item->CantidadFaltante - $a['cantidadRecibida'];
 
-                $a['cantidadSolicitadaAnterior'] =0; 
-                $a['cantidadRecibidaAnterior'] = 0;
-                $a['cantidadFaltanteAnterior'] = 0;
+                $a['cantidadSolicitadaAnterior'] = $item->CantidadSolicitadaAnterior; 
+                $a['cantidadRecibidaAnterior'] = $item->CantidadRecibidaAnterior;
+                $a['cantidadFaltanteAnterior'] = $item->CantidadFaltanteAnterior;
 
             $this->listaSumatoria[] = $a;
                 }   
