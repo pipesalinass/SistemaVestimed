@@ -79,6 +79,20 @@ class PostPedido extends Component
     public $pedidoAsociadoBordado;
     public $idPedidoAsociadoBordado;
     public $listaSumatoriaBordado = [];
+    public $listaTipoBordado = [];
+    public $listaCodigoModeloBordado = [];
+    public $listaTallaBordado = [];
+    public $listaColorBordado = [];
+    public $idTipoBordado;
+    public $tipoBordado;
+    public $idCodigoModeloBordado;
+    public $codigoModeloBordado;
+    public $idTallaBordado;
+    public $tallaBordado;
+    public $idColorBordado;
+    public $colorBordado;
+    public $idPersonaBordado;
+    public $personaBordado;
 
     //Variable para ordenar la lista de facturas
     public $sortBy = 'FK_Pedido';
@@ -120,6 +134,17 @@ class PostPedido extends Component
         'pedidoAsociadoBordado'                         => ['required', 'string', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'], // Pedido externo asociado
         'idPedidoAsociadoBordado'                       => ['numeric', 'exists:recepcion_detalles,RecepcionDetalleId'],
 
+        'idTipoBordado'                                 => ['numeric', 'exists:man_tipo_prendas,TipoPrendaId'],
+        'tipoBordado'                                   => ['required','string', 'exists:man_tipo_prendas,ManNombre', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
+        'idTallaBordado'                                => ['numeric', 'exists:man_talla_prendas,TallaPrendaId'],
+        'tallaBordado'                                  => ['required','string', 'exists:man_talla_prendas,ManNombre', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
+        'idCodigoModeloBordado'                         => ['numeric', 'exists:man_modelos,ModeloId'],
+        'codigoModeloBordado'                           => ['required','string', 'exists:man_modelos,ModCodigo', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
+        'idColorBordado'                                => ['numeric', 'exists:man_colors,ColorId'],
+        'colorBordado'                                  => ['required','string', 'exists:man_colors,ColNombre', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
+        'idPersonaBordado'                              => ['numeric', 'exists:man_colors,ColorId'],        
+        'personaBordado'                                => ['required','string', 'exists:man_modelos,ModCodigo', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
+
 
     ];
 
@@ -148,6 +173,38 @@ class PostPedido extends Component
 
         'idPedidoAsociadoBordado.numeric'               => 'El id de pedido asociado debe ser numérico.',
         'idPedidoAsociadoBordado.exists'                => 'El id no existe en el pedido',
+
+
+
+        'tipoBordado.required'                           => 'Debe seleccionar un tipo de prenda.',
+        'tipoBordado.string'                             => 'El tipo de prenda asociado al pedido debe ser alfa numérico.',
+        'tipoBordado.regex'                              => 'El campo solamente acepta mayúsculas, minúsculas, espacios, "."',
+        'tipoBordado.exists'                             => 'El nombre no existe en el tipo de prenda',
+
+        'idTipoBordado.numeric'                          => 'El id del tipo de prenda debe ser numérico.',
+        'idTipoBordado.exists'                           => 'El id no existe en el tipo de prenda',
+
+        'tallaBordado.required'                          => 'Debe seleccionar una talla.',
+        'tallaBordado.string'                            => 'La talla de la prenda asociado al pedido debe ser alfa numérico.',
+        'tallaBordado.regex'                             => 'El campo solamente acepta mayúsculas, minúsculas, espacios, "."',
+        'tallaBordado.exists'                            => 'El nombre no existe en la talla de prenda',
+
+        'idTallaBordado.numeric'                         => 'El id de la talla de prenda debe ser numérico.',
+        'idTallaBordado.exists'                          => 'El id no existe en la talla de prenda',
+
+        'codigoModeloBordado.required'                   => 'Debe seleccionar un codigo.',
+        'codigoModeloBordado.string'                     => 'El código del modelo asociado al pedido debe ser alfa numérico.',
+        'codigoModeloBordado.regex'                      => 'El campo solamente acepta mayúsculas, minúsculas, espacios, "."',
+        'codigoModeloBordado.exists'                     => 'El nombre no existe en el modelo',
+
+        'idCodigoModeloBordado.numeric'                  => 'El id del modelo debe ser numérico.',
+        'idCodigoModeloBordado.exists'                   => 'El id no existe en el modelo',
+
+        'colorBordado.required'                          => 'Debe seleccionar un color.',
+        'colorBordado.string'                            => 'El color del tipo de prenda asociado al pedido debe ser alfa numérico.',
+        'colorBordado.regex'                             => 'El campo solamente acepta mayúsculas, minúsculas, espacios, "."',
+        'colorBordado.exists'                            => 'El nombre no existe en el color del tipo de prenda',
+
 
     ];
    
@@ -211,6 +268,7 @@ class PostPedido extends Component
     public function updatedPedidoAsociadoBordado($pedidoAsociadoBordado_form) {
         $this->validateOnly("pedidoAsociadoBordado");
         $this->reset('listaSumatoriaBordado');
+        $this->reset('listaTipoBordado');
         $pedidoAsociadoBordado = RecepcionDetalle::where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                                     ->groupBy('FK_DocumentoExterno')->first();    
         if ($pedidoAsociadoBordado) {
@@ -222,7 +280,11 @@ class PostPedido extends Component
                                         ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                         ->groupBy('CodigoModelo', 'Talla', 'TipoPrenda', 'Color')
                                         ->get();
-            //dd($detalle);
+            $detalleTipo = RecepcionDetalle::select('TipoPrenda')
+                                        ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
+                                        ->groupBy('TipoPrenda')
+                                        ->get();
+            
             foreach ($detalle as $item) {
                 $a = array();
                 $a['id1'] = "";
@@ -235,9 +297,97 @@ class PostPedido extends Component
 
             $this->listaSumatoriaBordado[] = $a;
             }
+            //dd($detalle);
+            foreach ($detalleTipo as $item) {
+                $a = array();
+                $a['id1'] = "";
+                $a['tipo'] = $item->TipoPrenda;
+
+            $this->listaTipoBordado[] = $a;                
+            }
+
 
         }                                                     
     }    
+
+    public function updatedTipoBordado($tipoBordado_form) {
+        $this->validateOnly("tipoBordado");
+        $this->reset('listaCodigoModeloBordado');
+        $this->reset('listaTallaBordado');
+        $this->reset('listaColorBordado');
+
+        $detalleCodigoModelo = RecepcionDetalle::select('CodigoModelo')
+                                        ->where('TipoPrenda', '=', $tipoBordado_form)
+                                        ->groupBy('CodigoModelo')
+                                        ->get();
+
+
+        foreach ($detalleCodigoModelo as $item) {
+            $a = array();
+            $a['id1'] = "";
+            $a['codigoModelo'] = $item->CodigoModelo;
+
+        $this->listaCodigoModeloBordado[] = $a;                
+        }
+    }
+
+    public function updatedCodigoModeloBordado($codigoModeloBordado_form) {
+        $this->validateOnly("codigoModeloBordado");
+        $this->reset('listaColorBordado');
+        
+        $this->reset('listaTallaBordado');
+        $detalleMod = RecepcionDetalle::select('CodigoModelo')
+                                        ->where('TipoPrenda', '=', $this->tipoBordado)
+                                        ->where('CodigoModelo', '=', $codigoModeloBordado_form)
+                                        ->groupBy('CodigoModelo')
+                                        ->first();
+
+        $detalleMod = $detalleMod->CodigoModelo;
+        
+        $detalleTalla = RecepcionDetalle::select('Talla')
+                                        ->where('TipoPrenda', '=', $this->tipoBordado)
+                                        ->where('CodigoModelo', '=', $detalleMod)
+                                        ->groupBy('Talla')
+                                        ->get();
+
+        foreach ($detalleTalla as $item) {
+            $a = array();
+            $a['id1'] = "";
+            $a['talla'] = $item->Talla;
+
+        $this->listaTallaBordado[] = $a;                
+        }
+
+
+    }
+
+    public function updatedTallaBordado($tallaBordado_form) {
+        $this->validateOnly("tallaBordado");
+        $this->reset('listaColorBordado');
+        $detalleCol = RecepcionDetalle::select('Color')
+                                        ->where('TipoPrenda', '=', $this->tipoBordado)
+                                        ->where('CodigoModelo', '=', $this->codigoModeloBordado)
+                                        ->where('Talla', '=', $tallaBordado_form)
+                                        ->groupBy('Talla')
+                                        ->get();
+
+        //dd($detalleCol);
+        foreach ($detalleCol as $item) {
+            $a = array();
+            $a['id1'] = "";
+            $a['color'] = $item->Color;
+    
+            $this->listaColorBordado[] = $a;                
+            }                                  
+
+
+    }
+
+    public function updatedColorBordado($colorBordado_form) {
+        $this->validateOnly("colorBordado");
+        
+
+    }
 
     public function updatedNumeroFactura($numeroFactura_form) {
         $this->validateOnly("numeroFactura");
@@ -675,6 +825,10 @@ class PostPedido extends Component
             'listaSumatoria'                => $this->listaSumatoria,
             'listaSumatoriaBordado'         => $this->listaSumatoriaBordado,
             'listaAnterior'                 => $this->listaAnterior,
+            'listaTipoBordado'              => $this->listaTipoBordado,
+            'listaCodigoModeloBordado'      => $this->listaCodigoModeloBordado,
+            'listaTallaBordado'             => $this->listaTallaBordado,
+            'listaColorBordado'             => $this->listaColorBordado,
             'recepcionDetalle'              => $recepcionDetalle,
 
         ]);

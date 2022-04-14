@@ -575,7 +575,6 @@
                                 <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Cantidad en Stock</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -586,17 +585,7 @@
                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['suma']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">
-                                    <a wire:click="confirmInsertarCantidad( {{ $key }} )" title="Insertar cantidad recibida" style="cursor:pointer">
-                                        <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
-                                    </a>
-                                    @if ($sumatoria['id1'] != "null")                                        
-                                    <a wire:click="confirmMostrarRecepcion( {{ $key }} )" title="Mostrar recepción anterior" style="cursor:pointer">
-                                        <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
-                                    </a>   
-                                    @endif   
-                                </td>      
+                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['suma']}}</td>     
                             </tr>
                             @endif                           
                             @endforeach
@@ -613,52 +602,86 @@
                 <div class="parent-grid-row-1">
                     <!-- Pedido Asociado -->
                     <div class="form-group" style="display: flex; flex-direction: column;">
-                        <label for="pedAsociado">Pedido Externo Asociado:</label>
-                        <select class="form-control" id="pedAsociado" name="pedAsociado"
-                        wire:model="pedidoAsociado">
-                        @foreach ($pedidosAsociados as $key => $prenda)
+                        <label for="tipo">Tipo:</label>
+                        <select class="form-control" id="tipo" name="tipo"
+                        wire:model="tipoBordado">
+                        @foreach ($listaTipoBordado as $key => $prenda)
                             <option value="none" selected  hidden>Seleccione</option>
-                            <option> {{$prenda->NumPedidoExterno}} </option>
+                            <option> {{$prenda['tipo']}} </option>
                         @endforeach
-                        @error('pedidoAsociado')
+                        @error('tipoBordado')
                         <div class="text-danger">
-                            <strong>Wow!</strong> <span id="mensajeCrudPedidoAsociado">{{$message}}</span>
+                            <strong>Wow!</strong> <span id="mensajeCrudTipoBordado">{{$message}}</span>
                         </div>
                         @enderror       
                         </select>
                     </div>
                     <!-- Pedido Asociado -->
                     <div class="form-group" style="display: flex; flex-direction: column;">
-                        <label for="pedAsociado">Pedido Externo Asociado:</label>
-                        <select class="form-control" id="pedAsociado" name="pedAsociado"
-                        wire:model="pedidoAsociado">
-                        @foreach ($pedidosAsociados as $key => $prenda)
+                        <label for="codMod">Código Modelo:</label>
+                        <select class="form-control" id="codMod" name="codMod"
+                        wire:model="codigoModeloBordado">
+                        @foreach ($listaCodigoModeloBordado as $key => $prenda)
                             <option value="none" selected  hidden>Seleccione</option>
-                            <option> {{$prenda->NumPedidoExterno}} </option>
+                            <option> {{$prenda['codigoModelo']}} </option>
                         @endforeach
                         @error('pedidoAsociado')
                         <div class="text-danger">
-                            <strong>Wow!</strong> <span id="mensajeCrudPedidoAsociado">{{$message}}</span>
+                            <strong>Wow!</strong> <span id="mensajeCrudCodigoModeloBordado">{{$message}}</span>
                         </div>
                         @enderror       
                         </select>
                     </div>
                     <!-- Pedido Asociado -->
                     <div class="form-group" style="display: flex; flex-direction: column;">
-                        <label for="pedAsociado">Pedido Externo Asociado:</label>
-                        <select class="form-control" id="pedAsociado" name="pedAsociado"
-                        wire:model="pedidoAsociado">
+                        <label for="size">Talla:</label>
+                        <select class="form-control" id="size" name="size"
+                        wire:model="tallaBordado">
+                        @foreach ($listaTallaBordado as $key => $prenda)
+                            <option value="none" selected  hidden>Seleccione</option>
+                            <option> {{$prenda['talla']}} </option>
+                        @endforeach
+                        @error('pedidoAsociado')
+                        <div class="text-danger">
+                            <strong>Wow!</strong> <span id="mensajeCrudTallaBordado">{{$message}}</span>
+                        </div>
+                        @enderror       
+                        </select>
+                    </div>
+                    <!-- Pedido Asociado -->
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label for="col">Color:</label>
+                        <select class="form-control" id="col" name="col"
+                        wire:model="colorBordado">
+                        @foreach ($listaColorBordado as $key => $prenda)
+                            <option value="none" selected  hidden>Seleccione</option>
+                            <option> {{$prenda['color']}} </option>
+                        @endforeach
+                        @error('pedidoAsociado')
+                        <div class="text-danger">
+                            <strong>Wow!</strong> <span id="mensajeCrudColorBordado">{{$message}}</span>
+                        </div>
+                        @enderror       
+                        </select>
+                    </div>
+                    <!-- Pedido Asociado -->
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label for="pers">Persona:</label>
+                        <select class="form-control" id="pers" name="pers"
+                        wire:model="personaBordado">
                         @foreach ($pedidosAsociados as $key => $prenda)
                             <option value="none" selected  hidden>Seleccione</option>
                             <option> {{$prenda->NumPedidoExterno}} </option>
                         @endforeach
                         @error('pedidoAsociado')
                         <div class="text-danger">
-                            <strong>Wow!</strong> <span id="mensajeCrudPedidoAsociado">{{$message}}</span>
+                            <strong>Wow!</strong> <span id="mensajeCrudPersonaBordado">{{$message}}</span>
                         </div>
                         @enderror       
                         </select>
-            </fieldset>
+                    </div>
+
+                    </fieldset>
 
                         <!-- Table row -->
            <div class="row">
@@ -701,14 +724,15 @@
                 </table>
             </div>
         </div>
+        
     </x-slot>
 
     <x-slot name="footer">
-        <button type="button" class="btn btn-secondary" wire:click="cancelarPostPedidoAdd">
+        <button type="button" class="btn btn-secondary" wire:click="cancelarBordado">
             {{ __('Cancelar') }}
         </button>
 
-        <button type="button" class="btn btn-primary" wire:click="submitRecepcion">
+        <button type="button" class="btn btn-primary" wire:click="submitDetalle">
             {{ __('Guardar Factura') }}
         </button>
 
