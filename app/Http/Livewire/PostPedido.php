@@ -64,6 +64,7 @@ class PostPedido extends Component
     public $listaSumatoria = [];
 
     public $cantidadRecibida;
+    public $cantidadRecibidaActualizada=0;
     public $FK_Pedido;
     public $FK_RecepcionCabecera;
 
@@ -248,6 +249,7 @@ class PostPedido extends Component
 
     public function updatedCantidadRecibida($cantidadRecibida_form) {
         $this->validateOnly("cantidadRecibida");
+        $this->cantidadRecibidaActualizada=1;
     }
 
     //Funciones para crear una Recepcion de Factura (PostPedido)
@@ -322,32 +324,22 @@ class PostPedido extends Component
         $this->idRecepcionDetalle = $id;
     }
 
-    public function submitCabecera() {
+    public function almacenartCabecera() {
         
         if ($this->pedidoAsociado == null) {
-            $errorCode = 'Debe seleccionar un pedido antes de guardar';
+            $errorCode = 'Debe seleccionar un pedido antes de continuar';
             $this->dispatchBrowserEvent('abrirMsjeFallido10', ['error' => $errorCode]);
         } else {
 
-        $this->reset('listaSumatoria');
+        $this->reset('listaSumatoria','cantidadRecibidaActualizada');
         $this->validateOnly('pedidoAsociado');
         $this->validateOnly('numeroFactura');
-        $this->validateOnly('observacionfactura');
+        $this->validateOnly('observacionfactura');                  
 
         $fk_pedido = ManPedidosExterno::select('FK_Pedido')
                                         ->where('NumPedidoExterno', '=', $this->pedidoAsociado)
                                         ->first();
         $this->FK_Pedido = $fk_pedido->FK_Pedido;                      
-
-        RecepcionCabecera::create([
-            'FK_Pedido'                         => $this->FK_Pedido,
-            'FechaRecepcion'                    => $this->todayDate,
-            'NumeroDocumentoExterno'            => $this->pedidoAsociado,
-            'NumeroFactura'                     => $this->numeroFactura,
-            'FechaDocumentoExterno'             => $this->fechaPedidoExterno,
-            'Estado'                            => "BORRADOR",
-            'Observacion'                       => $this->observacionfactura,
-            ]);
 
         $recepcionDetalle = RecepcionDetalle::where('FK_Pedido', '=',$this->FK_Pedido)->first();
         
@@ -412,20 +404,30 @@ class PostPedido extends Component
                 $a['cantidadFaltanteAnterior'] = 0;
 
             $this->listaSumatoria[] = $a;
-                }                 
+                }   
+                
             }
+            $this->estadoBotonGuardarCabeceraRecepcion = 1;
 
         }
-
-        $this->estadoBotonGuardarCabeceraRecepcion = 1;
     }
 
-    public function submitDetalle() {    
-        //dd($this);
-        if ($this->pedidoAsociado == null) {
-            $errorCode = 'Debe seleccionar un pedido antes de guardar';
+    public function submitRecepcion() {    
+
+        if ($this->cantidadRecibidaActualizada == 0) {
+            $errorCode = 'Debe agregar la cantidad recibida del o los productos para guardar';
             $this->dispatchBrowserEvent('abrirMsjeFallido10', ['error' => $errorCode]);
-        } else {
+        } else {               
+    
+        RecepcionCabecera::create([
+            'FK_Pedido'                         => $this->FK_Pedido,
+            'FechaRecepcion'                    => $this->todayDate,
+            'NumeroDocumentoExterno'            => $this->pedidoAsociado,
+            'NumeroFactura'                     => $this->numeroFactura,
+            'FechaDocumentoExterno'             => $this->fechaPedidoExterno,
+            'Estado'                            => "BORRADOR",
+            'Observacion'                       => $this->observacionfactura,
+        ]);
 
         $recepcionDetalle = RecepcionDetalle::where('FK_Pedido', '=',$this->FK_Pedido)->first();
         

@@ -283,78 +283,80 @@
                     </div>
                     <div class="form-group col-md-8 align-self-end d-flex align-items-center justify-content-center">
                         @can('Agregar modelos')                        
-                        <button wire:click="submitCabecera" type="button" class="form-control btn btn-primary" {{ $this->estadoBotonGuardarCabeceraRecepcion? 'disabled' : 'enabled' }}>Guardar recepción</button>
+                        <button wire:click="almacenartCabecera" type="button" class="form-control btn btn-primary" {{ $this->estadoBotonGuardarCabeceraRecepcion ? 'disabled' : 'enabled' }}>Continuar</button>
                         @endcan
                     </div>
  
             </fieldset>
-            <div class="form-row">
-                <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
-                    role="alert" id="alertaCrudErrorPersonas10" style="display: none;">
-                    <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas10"></span>
-                    <button type="button" class="close" aria-label="Close" id="cerrarAlertCrudErrorPersonas10">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="form-row">
+                    <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
+                        role="alert" id="alertaCrudErrorPersonas10" style="display: none;">
+                        <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas10"></span>
+                        <button type="button" class="close" aria-label="Close" id="cerrarAlertCrudErrorPersonas10">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <!-- Información factura -->
-            <!-- Table row -->
-           <div class="row">
-                <div class="card-body table-responsive p-0"">
-                    <table class="table table-hover text-nowrap">
-                        <thead>
-                            <legend class="w-auto px-2">Prendas</legend>
-                            <tr>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Cantidad Solicitada</th>
-                                <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Recibida</th>
-                                <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Faltante</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($listaSumatoria as $key => $sumatoria)
-                            @if ($sumatoria != null)
-                            <tr >
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>
-                                <td class="rounded border px-4 py-2" style="text-align: center">
-                                    <a wire:click="confirmInsertarCantidad( {{ $key }} )" title="Insertar cantidad recibida" style="cursor:pointer">
-                                        <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
-                                    </a>
-                                    @if ($sumatoria['id1'] != "null")                                        
-                                    <a wire:click="confirmMostrarRecepcion( {{$sumatoria['id']}} )" title="Mostrar recepción anterior" style="cursor:pointer">
-                                        <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
-                                    </a>   
-                                    @endif   
-                                </td>          
-                            </tr>
-                            @endif                           
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>   
 
+            @if($this->estadoBotonGuardarCabeceraRecepcion == 1)
+                <!-- Información factura -->
+                <!-- Table row -->
+                <div class="row">
+                    <div class="card-body table-responsive p-0"">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <legend class="w-auto px-2">Prendas</legend>
+                                <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Cantidad Solicitada</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Recibida</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Faltante</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($listaSumatoria as $key => $sumatoria)
+                                @if ($sumatoria != null)
+                                <tr >
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <a wire:click="confirmInsertarCantidad( {{ $key }} )" title="Insertar cantidad recibida" style="cursor:pointer">
+                                            <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
+                                        </a>
+                                        @if ($sumatoria['id1'] != "null")                                        
+                                        <a wire:click="confirmMostrarRecepcion( {{$sumatoria['id']}} )" title="Mostrar recepción anterior" style="cursor:pointer">
+                                            <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
+                                        </a>   
+                                        @endif   
+                                    </td>          
+                                </tr>
+                                @endif                           
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>   
+            @endif
     </x-slot>
 
     <x-slot name="footer">
         <button type="button" class="btn btn-secondary" wire:click="cancelarPostPedidoAdd">
             {{ __('Cancelar') }}
         </button>
-
-        <button type="button" class="btn btn-primary" wire:click="submitDetalle">
-            {{ __('Guardar detalle recepción') }}
-        </button>
-
+        @if($this->estadoBotonGuardarCabeceraRecepcion == 1)
+            <button type="button" class="btn btn-primary" wire:click="submitRecepcion">
+                {{ __('Guardar detalle recepción') }}
+            </button>
+        @endif
 
     </x-slot>
 </x-dialog-modal-general>
@@ -720,7 +722,7 @@
             {{ __('Cancelar') }}
         </button>
 
-        <button type="button" class="btn btn-primary" wire:click="submitDetalle">
+        <button type="button" class="btn btn-primary" wire:click="submitRecepcion">
             {{ __('Guardar Factura') }}
         </button>
 
