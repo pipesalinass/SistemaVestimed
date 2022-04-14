@@ -144,11 +144,6 @@
                                 <thead style="text-align: center">
                                     <tr>
                                         <th>
-                                            <button wire:click="sortBy('FK_Pedido')">
-                                                Número de pedido
-                                            </button>
-                                        </th>
-                                        <th>
                                             <button wire:click="sortBy('FechaRecepcion')">
                                                 Fecha Recepción
                                             </button>
@@ -184,7 +179,6 @@
                                 <tbody>
                                     @foreach($facturas as $key => $factura)
                                     <tr>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FK_Pedido}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaRecepcion->format('d-m-Y')}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->NumeroDocumentoExterno}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->NumeroFactura}}</td>
