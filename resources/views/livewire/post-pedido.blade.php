@@ -64,11 +64,11 @@
                     <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
-                                id="borradorClick"
-                                wire:click="changeEstado('ESPERA DE PRENDAS')"><i class="far fa-file"></i></span>
+                                id="parcialClick"
+                                wire:click="changeEstado('RECEPCION_PARCIAL')"><i class="far fa-file"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Recepcion parcial</span>
-                                <span class="info-box-number" id="borradora">{{$espera_de_prendas}}</span>
+                                <span class="info-box-number" id="parcial">{{$recepcion_parcial}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -76,11 +76,11 @@
                     <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-warning elevation-1 text-white" style="cursor:pointer"
-                                id="generadoClick"
-                                wire:click="changeEstado('EN BORDADO')"><i class="far fa-thumbs-up"></i></span>
+                                id="finalizadaClick"
+                                wire:click="changeEstado('RECEPCION_FINALIZADA')"><i class="far fa-thumbs-up"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Recepcion finalizada</span>
-                                <span class="info-box-number" id="generada">{{$en_bordado}}</span>
+                                <span class="info-box-number" id="finalizada">{{$recepcion_finalizada}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -88,11 +88,11 @@
                     <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
-                                id="enTallajeClick"
-                                wire:click="changeEstado('RECIBE DE BORDADO')"><i class="far fa-file"></i></span>
+                                id="enBordadoClick"
+                                wire:click="changeEstado('EN BORDADO')"><i class="far fa-file"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">En bordado</span>
-                                <span class="info-box-number" id="enTallaje">{{$recibe_de_bordado}}</span>
+                                <span class="info-box-number" id="enBordado">{{$en_bordado}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -102,11 +102,11 @@
                     <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
-                                id="gestionPedidoClick"
-                                wire:click="changeEstado('ENTREGADO')"><i class="fas fa-cog"></i></span>
+                                id="recibeBordadoClick"
+                                wire:click="changeEstado('RECIBE BORDADO')"><i class="fas fa-cog"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Recibe de bordado</span>
-                                <span class="info-box-number" id="gestionPedido">{{$entregado}}</span>
+                                <span class="info-box-number" id="recibeBordado">{{$recibe_de_bordado}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -117,11 +117,11 @@
                     <div class="">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
-                                id="gestionPedidoClick"
+                                id="entregadoClick"
                                 wire:click="changeEstado('ENTREGADO')"><i class="fas fa-cog"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Entregado</span>
-                                <span class="info-box-number" id="gestionPedido">{{$entregado}}</span>
+                                <span class="info-box-number" id="entregado">{{$entregado}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>

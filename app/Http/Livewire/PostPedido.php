@@ -48,10 +48,12 @@ class PostPedido extends Component
     
     //Variables estados postPedido
     public $estado_pick = "";
-    public $espera_de_prendas = 0;
+    public $recepcion_parcial = 0;
+    public $recepcion_finalizada = 0;
     public $en_bordado = 0;
     public $recibe_de_bordado = 0;
     public $entregado = 0;
+    
 
     /**Variables iniciales PostPedido */
     public $pedido;
@@ -400,6 +402,12 @@ class PostPedido extends Component
     public function updatedCantidadRecibida($cantidadRecibida_form) {
         $this->validateOnly("cantidadRecibida");
         $this->cantidadRecibidaActualizada=1;
+    }
+
+    public function changeEstado($estado)
+    {
+        $this->estado_pick = $estado;
+        $this->resetPage();
     }
 
     //Funciones para crear una Recepcion de Factura (PostPedido)
@@ -796,17 +804,20 @@ class PostPedido extends Component
             });
         }
 
-        $this->reset(['espera_de_prendas', 'en_bordado', 'recibe_de_bordado', 'entregado']);
-        $estados = $facturas->get()->countBy('PedEstado');
+        $this->reset(['recepcion_parcial', 'recepcion_finalizada', 'en_bordado', 'recibe_de_bordado', 'entregado']);
+        $estados = $facturas->get()->countBy('Estado');
         foreach ($estados as $estado => $total) {
             switch ($estado) {
-                case "ESPERA DE PRENDAS":
-                    $this->espera_de_prendas = $total;
+                case "RECEPCION_PARCIAL":
+                    $this->recepcion_parcial = $total;
+                    break;
+                case "RECEPCION_FINALIZADA":
+                    $this->recepcion_finalizada = $total;
                     break;
                 case "EN BORDADO":
                     $this->en_bordado = $total;
                     break;
-                case "RECIBE DE BORDADO":
+                case "RECIBE BORDADO":
                     $this->recibe_de_bordado = $total;
                     break;
                 case "ENTREGADO":
