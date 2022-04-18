@@ -641,7 +641,7 @@
                             <option value="none" selected  hidden>Seleccione</option>
                             <option> {{$prenda['codigoModelo']}} </option>
                         @endforeach
-                        @error('pedidoAsociado')
+                        @error('codigoModeloBordado')
                         <div class="text-danger">
                             <strong>Wow!</strong> <span id="mensajeCrudCodigoModeloBordado">{{$message}}</span>
                         </div>
@@ -657,7 +657,7 @@
                             <option value="none" selected  hidden>Seleccione</option>
                             <option> {{$prenda['talla']}} </option>
                         @endforeach
-                        @error('pedidoAsociado')
+                        @error('tallaBordado')
                         <div class="text-danger">
                             <strong>Wow!</strong> <span id="mensajeCrudTallaBordado">{{$message}}</span>
                         </div>
@@ -673,7 +673,7 @@
                             <option value="none" selected  hidden>Seleccione</option>
                             <option> {{$prenda['color']}} </option>
                         @endforeach
-                        @error('pedidoAsociado')
+                        @error('colorBordado')
                         <div class="text-danger">
                             <strong>Wow!</strong> <span id="mensajeCrudColorBordado">{{$message}}</span>
                         </div>
@@ -685,11 +685,11 @@
                         <label for="pers">Persona:</label>
                         <select class="form-control" id="pers" name="pers"
                         wire:model="personaBordado">
-                        @foreach ($pedidosAsociados as $key => $prenda)
+                        @foreach ($listaPersonaBordado as $key => $persona)
                             <option value="none" selected  hidden>Seleccione</option>
-                            <option> {{$prenda->NumPedidoExterno}} </option>
+                            <option> {{$persona['primerNombre'].' '.$persona['segundoNombre'].' '.$persona['primerApellido'].' '.$persona['segundoApellido']}} </option>
                         @endforeach
-                        @error('pedidoAsociado')
+                        @error('personaBordado')
                         <div class="text-danger">
                             <strong>Wow!</strong> <span id="mensajeCrudPersonaBordado">{{$message}}</span>
                         </div>
