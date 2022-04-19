@@ -697,6 +697,24 @@
                         </select>
                     </div>
 
+                    <div class="form-group" style="display: flex; flex-direction: row;">
+                        <div  class="col-7 mr-5">
+                            <label for="pers">Cantidad:</label>
+                            <input type="number" min="0" max="999" class="form-control" id="cantidadPrenda"
+                            wire:model="cantidadPrendaBordado">
+                            @error('cantidadPrendaBordado')
+                            <div class="text-danger">
+                                <strong>Wow!</strong> <span id="mensajeCrudCantidadPrenda">{{$message}}</span>
+                            </div>
+                            @enderror
+                        </div>
+                        <div style="margin-top:35px">
+                            <button wire:click="agregarPrendaBordado()" type="button"
+                            class="btn btn-primary btn-sm ms-4" id="btAddBordado"><i
+                                class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+
                     </fieldset>
 
                         <!-- Table row -->
@@ -710,28 +728,25 @@
                             <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Cantidad en Stock</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center">Persona</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($listaSumatoriaBordado as $key => $sumatoria)
+                        @foreach($listaBordado as $key => $list)
                         @if ($sumatoria != null)
                         <tr >
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['suma']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$list['tipoBordado']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$list['codigoModeloBordado']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$list['tallaBordado']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$list['colorBordado']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$list['cantidadPrendaBordado']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$list['personaBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">
-                                <a wire:click="confirmInsertarCantidad( {{ $key }} )" title="Insertar cantidad recibida" style="cursor:pointer">
-                                    <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
-                                </a>
-                                @if ($sumatoria['id1'] != "null")                                        
-                                <a wire:click="confirmMostrarRecepcion( {{ $key }} )" title="Mostrar recepción anterior" style="cursor:pointer">
-                                    <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
-                                </a>   
-                                @endif   
+                                <a wire:click="quitarPrendaBordado( {{ $key }} )" title="Quitar prenda" style="cursor:pointer">
+                                    <i class="fas fa-minus-circle" style="color:#0a6ed3"></i>
+                                </a>  
                             </td>      
                         </tr>
                         @endif                           

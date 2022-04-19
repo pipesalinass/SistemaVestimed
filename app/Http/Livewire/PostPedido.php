@@ -96,6 +96,8 @@ class PostPedido extends Component
     public $colorBordado;
     public $idPersonaBordado;
     public $personaBordado;
+    public $cantidadPrendaBordado;
+    public $listaBordado = [];
 
     //Variable para ordenar la lista de facturas
     public $sortBy = 'FK_Pedido';
@@ -328,6 +330,9 @@ class PostPedido extends Component
         $this->reset('tallaBordado');
         $this->reset('colorBordado');
         $this->reset('personaBordado');
+        $this->reset('cantidadPrendaBordado');
+
+        $this->tipoBordado = $tipoBordado_form;
 
         $detalleCodigoModelo = RecepcionDetalle::select('CodigoModelo')
                                         ->where('TipoPrenda', '=', $tipoBordado_form)
@@ -807,7 +812,7 @@ class PostPedido extends Component
             $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadSolicitadaAnterior'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'];
             $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadRecibidaAnterior'] = $this->cantidadRecibida;
             $this->listaSumatoria[$this->idRecepcionDetalle]['cantidadFaltanteAnterior'] = $this->listaSumatoria[$this->idRecepcionDetalle]['sumatoria'] - $this->cantidadRecibida;
-           
+
             $this->reset([
                 'cantidadRecibida',
             ]);
@@ -817,6 +822,29 @@ class PostPedido extends Component
 
     public function confirmBordadoAdd() {
         $this->confirmingBordado = true;
+    }
+        
+    //Funcion para cancelar al entrar al modal Bordado
+    public function cancelarBordado() {
+        $this->confirmingBordado = false; 
+    }
+
+    //Funcion para agregar al arreglo bordado
+    public function agregarPrendaBordado(){
+        array_push($this->listaBordado,[
+            'tipoBordado'  => $this->tipoBordado, 
+            'codigoModeloBordado' => $this->codigoModeloBordado,
+            'tallaBordado' => $this->tallaBordado,
+            'colorBordado'  => $this->colorBordado, 
+            'personaBordado' => $this->personaBordado,
+            'cantidadPrendaBordado' => $this->cantidadPrendaBordado,
+        ]);
+                
+        $this->reset('tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');
+    }
+
+    public function quitarPrendaBordado($key){
+            unset($this->listaBordado[$key]);
     }
 
     public function render()
@@ -875,8 +903,7 @@ class PostPedido extends Component
         $facturas = $facturas->paginate(10);
 
         $pedidosAsociados = ManPedidosExterno::all();
-        $pedidosAsociadosBordado = RecepcionDetalle::groupBy('FK_DocumentoExterno')->get();
-                                       
+        $pedidosAsociadosBordado = RecepcionDetalle::groupBy('FK_DocumentoExterno')->get();                                   
         $recepcionDetalle = RecepcionDetalle::where('FK_Pedido', '=', $this->FK_Pedido)
                                             ->orderBy('RecepcionDetalleId','desc')
                                             ->first();
@@ -895,6 +922,7 @@ class PostPedido extends Component
             'listaTallaBordado'             => $this->listaTallaBordado,
             'listaColorBordado'             => $this->listaColorBordado,
             'listaPersonaBordado'           => $this->listaPersonaBordado,
+            'listaBordado'                  => $this->listaBordado,
             'recepcionDetalle'              => $recepcionDetalle,
 
         ]);
