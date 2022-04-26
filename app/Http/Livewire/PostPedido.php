@@ -21,6 +21,7 @@ use App\Models\ManTallaPrenda;
 use App\Models\OpPedidos;
 use App\Models\OpPedidosModelo;
 use App\Models\OpPedidosPersona;
+use App\Models\PrendaPersona;
 use App\Models\RecepcionCabecera;
 use App\Models\RecepcionDetalle;
 use App\Models\User;
@@ -110,6 +111,7 @@ class PostPedido extends Component
     public $confirmingDetalleEdit = false;
     public $confirmingMostrarRecepcion = false;
     public $confirmingBordado = false;
+    public $confirmingPrendaPersona = false;
 
     public $idRecepcionCabecera;
     public $idRecepcionDetalle;
@@ -266,8 +268,7 @@ class PostPedido extends Component
             }    
         } else {
             $this->reset(['idPedidoAsociado']);
-        }
-        
+        }        
     }
 
     public function updatedPedidoAsociadoBordado($pedidoAsociadoBordado_form) {
@@ -279,6 +280,8 @@ class PostPedido extends Component
         $this->reset('listaColorBordado');
         $this->reset('listaPersonaBordado');
         $this->reset('tipoBordado');
+        $this->reset('listaBordado');
+        
         $pedidoAsociadoBordado = RecepcionDetalle::where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                                     ->groupBy('FK_DocumentoExterno')->first();    
         if ($pedidoAsociadoBordado) {
@@ -286,10 +289,12 @@ class PostPedido extends Component
             $fecha = ManPedidosExterno::where('NumPedidoExterno', '=', $pedidoAsociadoBordado_form)->first();
             $this->fechaPedidoExternoBordado = $fecha->created_at->format('Y-m-d');
 
-            $detalle = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(CantidadRecibida) as suma'))
+            $detalle = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(CantidadRecibida) as suma'), 'prenda_personas.*', DB::raw('sum(CantidadPersona) as suma2'))
+                                        ->leftjoin('prenda_personas', 'recepcion_detalles.RecepcionDetalleId', '=', 'prenda_personas.FK_RecepcionDetalle')
                                         ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                         ->groupBy('CodigoModelo', 'Talla', 'TipoPrenda', 'Color')
                                         ->get();
+                                        //dd($detalle);
             $detalleTipo = RecepcionDetalle::select('TipoPrenda')
                                         ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                         ->groupBy('TipoPrenda')
@@ -303,7 +308,7 @@ class PostPedido extends Component
                 $a['ModCodigo'] = $item->CodigoModelo;
                 $a['TipoPrenda'] = $item->TipoPrenda;
                 $a['ColorPrenda'] = $item->Color;
-                $a['suma'] = $item->suma;
+                $a['suma'] = $item->suma - $item->suma2;
 
             $this->listaSumatoriaBordado[] = $a;
             }
@@ -315,9 +320,7 @@ class PostPedido extends Component
 
             $this->listaTipoBordado[] = $a;                
             }
-
-
-        }                                                     
+        }                                                    
     }    
 
     public function updatedTipoBordado($tipoBordado_form) {
@@ -336,9 +339,9 @@ class PostPedido extends Component
 
         $detalleCodigoModelo = RecepcionDetalle::select('CodigoModelo')
                                         ->where('TipoPrenda', '=', $tipoBordado_form)
+                                        ->where('FK_DocumentoExterno', '=', $this->pedidoAsociadoBordado)
                                         ->groupBy('CodigoModelo')
                                         ->get();
-
 
         foreach ($detalleCodigoModelo as $item) {
             $a = array();
@@ -361,6 +364,7 @@ class PostPedido extends Component
         $detalleMod = RecepcionDetalle::select('CodigoModelo')
                                         ->where('TipoPrenda', '=', $this->tipoBordado)
                                         ->where('CodigoModelo', '=', $codigoModeloBordado_form)
+                                        ->where('FK_DocumentoExterno', '=', $this->pedidoAsociadoBordado)
                                         ->groupBy('CodigoModelo')
                                         ->first();
 
@@ -369,6 +373,7 @@ class PostPedido extends Component
         $detalleTalla = RecepcionDetalle::select('Talla')
                                         ->where('TipoPrenda', '=', $this->tipoBordado)
                                         ->where('CodigoModelo', '=', $detalleMod)
+                                        ->where('FK_DocumentoExterno', '=', $this->pedidoAsociadoBordado)
                                         ->groupBy('Talla')
                                         ->get();
 
@@ -379,8 +384,6 @@ class PostPedido extends Component
 
         $this->listaTallaBordado[] = $a;                
         }
-
-
     }
 
     public function updatedTallaBordado($tallaBordado_form) {
@@ -393,8 +396,9 @@ class PostPedido extends Component
         $detalleCol = RecepcionDetalle::select('Color')
                                         ->where('TipoPrenda', '=', $this->tipoBordado)
                                         ->where('CodigoModelo', '=', $this->codigoModeloBordado)
+                                        ->where('FK_DocumentoExterno', '=', $this->pedidoAsociadoBordado)
                                         ->where('Talla', '=', $tallaBordado_form)
-                                        ->groupBy('Talla')
+                                        ->groupBy('Color')
                                         ->get();
 
         //dd($detalleCol);
@@ -404,30 +408,26 @@ class PostPedido extends Component
             $a['color'] = $item->Color;
     
             $this->listaColorBordado[] = $a;                
-            }                                  
-
-
+            }
     }
 
     public function updatedColorBordado($colorBordado_form) {
         $this->validateOnly("colorBordado");
         $this->reset('listaPersonaBordado');
         $this->reset('personaBordado');
-
-        //dd($this);
-        $persona = ManPedidosExterno::select('man_pedidos_externos.*', 'op_pedidos_personas.*', 'man_tallaje_personas.*', 'man_tipo_prendas.*', 'man_modelos.*', 'man_colors.*')
+     
+        $persona = ManPedidosExterno::select('man_pedidos_externos.*', 'op_pedidos_personas.*', 'man_tallaje_personas.*', 'man_tipo_prendas.*', 'man_modelos.*', 'man_colors.*', 'op_pedidos_modelos.*')
                                     ->leftjoin('op_pedidos_personas', 'man_pedidos_externos.FK_Pedido', '=', 'op_pedidos_personas.FK_pedido')
                                     ->leftjoin('man_tallaje_personas', 'op_pedidos_personas.PedidoPersonaId', '=', 'man_tallaje_personas.FK_PedidoPersona')
                                     ->leftjoin('man_tipo_prendas', 'man_tallaje_personas.FK_TipoPrenda', '=', 'man_tipo_prendas.TipoPrendaId')
-                                    ->leftjoin('man_modelos', 'man_tallaje_personas.FK_PedidoModelo', '=', 'man_modelos.ModeloId')
+                                    ->leftjoin('op_pedidos_modelos', 'man_tallaje_personas.FK_PedidoModelo', '=', 'op_pedidos_modelos.id')
+                                    ->leftjoin('man_modelos', 'op_pedidos_modelos.FK_Modelo', '=', 'man_modelos.ModeloId')
                                     ->leftjoin('man_colors', 'man_tallaje_personas.idColor', '=', 'man_colors.ColorId')
                                     ->where('man_pedidos_externos.NumPedidoExterno', '=', $this->pedidoAsociadoBordado)
                                     ->where('man_tipo_prendas.ManNombre', '=', $this->tipoBordado)
-                                    ->where('man_modelos.ModCodigo', '=', $this->codigoModeloBordado)
                                     ->where('man_tallaje_personas.TallajeTalla', '=', $this->tallaBordado)
                                     ->where('man_colors.ColNombre', '=', $this->colorBordado)
                                     ->get();
-                                    //dd($persona);
 
         foreach ($persona as $item) {
             $a = array();
@@ -439,7 +439,6 @@ class PostPedido extends Component
             
             $this->listaPersonaBordado[] = $a;                
             }              
-
     }
 
     public function updatedNumeroFactura($numeroFactura_form) {
@@ -621,6 +620,10 @@ class PostPedido extends Component
             $this->estadoBotonGuardarCabeceraRecepcion = 1;
 
         }
+    }
+
+    public function submitBordado() {
+        dd($this);
     }
 
     public function submitRecepcion() {    
@@ -831,20 +834,68 @@ class PostPedido extends Component
 
     //Funcion para agregar al arreglo bordado
     public function agregarPrendaBordado(){
-        array_push($this->listaBordado,[
-            'tipoBordado'  => $this->tipoBordado, 
-            'codigoModeloBordado' => $this->codigoModeloBordado,
-            'tallaBordado' => $this->tallaBordado,
-            'colorBordado'  => $this->colorBordado, 
-            'personaBordado' => $this->personaBordado,
-            'cantidadPrendaBordado' => $this->cantidadPrendaBordado,
-        ]);
+        $key = array_search($this->tipoBordado, array_column($this->listaSumatoriaBordado, 'TipoPrenda')); 
+        $filtered_array = array_filter($this->listaSumatoriaBordado, function($val){
+            return ($val['TipoPrenda']==$this->tipoBordado and $val['ModCodigo']==$this->codigoModeloBordado 
+                                        and $val['TallajeTalla']==$this->tallaBordado  and $val['ColorPrenda']==$this->colorBordado);
+                                        });
+        foreach ( $filtered_array as $key => $item) {
+            $id = $item['id'];
+        }
+
                 
-        $this->reset('tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');
+        $this->listaSumatoriaBordado[$key]['suma'] = $this->listaSumatoriaBordado[$key]['suma'] - 1;     
+            
+            
+            array_push($this->listaBordado,[
+                'id'                        => $id,
+                'tipoBordado'               => $this->tipoBordado, 
+                'codigoModeloBordado'       => $this->codigoModeloBordado,
+                'tallaBordado'              => $this->tallaBordado,
+                'colorBordado'              => $this->colorBordado, 
+                'personaBordado'            => $this->personaBordado,
+                'cantidadPrendaBordado'     => $this->cantidadPrendaBordado,
+            ]);
+            
+            $this->reset('id', 'tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');        
+        
     }
 
     public function quitarPrendaBordado($key){
             unset($this->listaBordado[$key]);
+    }
+
+    public function enviarBordado() {
+        //dd($this);
+        if (count($this->listaBordado) > 0) {
+            foreach ($this->listaBordado as $item) {
+                PrendaPersona::create([
+                    'TipoPrendaPersona'                        => $item['tipoBordado'],
+                    'CodigoModeloPersona'                      => $item['codigoModeloBordado'],
+                    'TallaPersona'                             => $item['tallaBordado'],
+                    'ColorPersona'                             => $item['colorBordado'],
+                    'PersonaAsociada'                          => $item['personaBordado'],
+                    'CantidadPersona'                          => $item['cantidadPrendaBordado'],
+                    'FK_RecepcionDetalle'                      => $item['id'],
+                    'EstadoPersona'                            => "EN BORDADO",
+                    'FK_DocumentoExterno1'                     => $this->pedidoAsociadoBordado,
+
+                    ]);           
+            }
+            $this->reset([
+                'pedidoAsociadoBordado', 'listaBordado', 'listaSumatoriaBordado',
+            ]);
+            $this->confirmingBordado = false;
+        }
+    }
+
+    public function confirmPrendaPersona ($id) {
+        $this->idPedidoAsociadoBordado = $id;
+        $this->confirmingPrendaPersona = true;
+    }
+
+    public function cancelarPrendaPersona () {
+        $this->confirmingPrendaPersona = false;
     }
 
     public function render()
@@ -901,14 +952,26 @@ class PostPedido extends Component
         }
 
         $facturas = $facturas->paginate(10);
+        $recep = RecepcionCabecera::all();
+        if ($recep->isEmpty()) {
+            $pedidosAsociados = ManPedidosExterno::all();
 
-        $pedidosAsociados = ManPedidosExterno::all();
+        } else {
+            $pedidosAsociados = ManPedidosExterno::select('man_pedidos_externos.*', 'recepcion_cabeceras.*')
+                                                 ->leftjoin('recepcion_cabeceras', 'man_pedidos_externos.NumPedidoExterno', '=', 'recepcion_cabeceras.NumeroDocumentoExterno')
+                                                 ->where('recepcion_cabeceras.Estado', '!=', 'RECEPCION_FINALIZADA')
+                                                 ->get();
+        }
+                                            
         $pedidosAsociadosBordado = RecepcionDetalle::groupBy('FK_DocumentoExterno')->get();                                   
         $recepcionDetalle = RecepcionDetalle::where('FK_Pedido', '=', $this->FK_Pedido)
                                             ->orderBy('RecepcionDetalleId','desc')
                                             ->first();
 
         $recepcionDetalle = RecepcionDetalle::where('FK_RecepcionCabecera', '=', $this->FK_RecepcionCabecera)->get();
+
+        $prendaPersona = PrendaPersona::where('FK_DocumentoExterno1', '=', $this->idPedidoAsociadoBordado)->get();
+        
 
         return view('livewire.post-pedido', [
             'facturas'                      => $facturas,
@@ -924,6 +987,7 @@ class PostPedido extends Component
             'listaPersonaBordado'           => $this->listaPersonaBordado,
             'listaBordado'                  => $this->listaBordado,
             'recepcionDetalle'              => $recepcionDetalle,
+            'prendaPersona'                 => $prendaPersona,
 
         ]);
     }

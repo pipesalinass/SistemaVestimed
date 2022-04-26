@@ -1430,7 +1430,7 @@
                                     <td class="rounded border px-4 py-2" style="text-align: center; display: none;"> {{ $vinculacion['FK_Modelo'] }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center; display: none;"> {{ $vinculacion['FK_Color'] }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">
-                                        @can('Quitar vinculacion modelo pedido')
+                                        @can('Quitar vinculacion modelo persona')
                                             
                                         <a wire:click="quitarVinculacion( {{$key}} )" title="Quitar Vinculación" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>      
                                         @endcan   

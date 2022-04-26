@@ -205,6 +205,9 @@
                                             <a wire:click="confirmRecepcionDetalle( {{ $factura->RecepcionCabeceraId }} )" title="Visualizar Detalle" style="cursor:pointer">
                                                 <i class="fas fa-eye" style="color:#0a6ed3" title="Ver Detalle"></i>
                                             </a>   
+                                            <a wire:click="confirmPrendaPersona( {{ $factura->NumeroDocumentoExterno }} )" title="Visualizar Personas con prendas" style="cursor:pointer">
+                                                <i class="fas fa-plus" style="color:#0a6ed3" title="Visualizar Personas con prendas"></i>
+                                            </a>   
                                         </td>
                                     </tr>
                                 @endforeach                     
@@ -763,11 +766,63 @@
             {{ __('Cancelar') }}
         </button>
 
-        <button type="button" class="btn btn-primary" wire:click="submitDetalle">
-            {{ __('Guardar Factura') }}
+        <button type="button" class="btn btn-primary" wire:click="enviarBordado">
+            {{ __('Enviar a bordado') }}
         </button>
 
 
     </x-slot>
 </x-dialog-modal-general>
 <!-- Bordado Modal -->
+
+<!-- PrendaPersona modal -->
+<x-dialog-modal-general wire:model="confirmingPrendaPersona">
+    <x-slot name="title">
+        {{ __('Recepción') }}
+    </x-slot>
+
+    <x-slot name="content">
+                <!-- Información Cantidad Recibida -->
+                <fieldset class="form-group border p-3 scheduler-border">
+                    <legend class="w-auto px-2">Información Prenda Persona</legend>
+                    <!-- Fecha Ingreso -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <legend class="w-auto px-2">Prendas asociadas a Personas</legend>
+                                <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Persona Asociada</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($prendaPersona as $key => $list)
+                                <tr >
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->TipoPrendaPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CodigoModeloPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->TallaPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->ColorPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CantidadPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->PersonaAsociada}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>                                        
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+    </x-slot>
+
+    <x-slot name="footer">
+        <button type="button" class="btn btn-secondary" wire:click="cancelarPrendaPersona">
+            {{ __('Cerrar') }}
+        </button>
+    </x-slot>
+</x-dialog-modal-general>
+<!-- PrendaPersona modal -->
+
