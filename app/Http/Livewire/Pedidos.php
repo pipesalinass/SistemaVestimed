@@ -1702,17 +1702,17 @@ class Pedidos extends Component
 
             } elseif ($temporal == 2) {
 
-                OpPedidosPersona::where('PedidoPersonaId', '=', $this->idPedidoPersona)->update(['PedPerEstado' => 'LISTO']);
+                OpPedidosPersona::where('PedidoPersonaId', '=', $this->idPedidoPersona)->update(['PedPerEstado' => 'ESPERA DE PRENDA']);
                 $this->confirmingTallajeAdd = false;
             }
             
         }
-        //Si hay alguna persona en estado EN PROCESO o LISTO, el estado del pedido pasa de GENERADO a EN TALLAJE
+        //Si hay alguna persona en estado EN PROCESO o ESPERA DE PRENDA, el estado del pedido pasa de GENERADO a EN TALLAJE
         $pedidoPersonas = OpPedidosPersona::where('FK_pedido', '=', $this->idPedido)->get();
         //dd($pedidoPersonas);
         $count = 0;
         foreach ($pedidoPersonas as $item) {
-            if($item->PedPerEstado == "EN PROCESO" || $item->PedPerEstado == "LISTO") {
+            if($item->PedPerEstado == "EN PROCESO" || $item->PedPerEstado == "ESPERA DE PRENDA") {
                 $count++;
             }
         }
@@ -1729,7 +1729,7 @@ class Pedidos extends Component
         $count = 0;
         $tallaje = OpPedidosPersona::where('FK_pedido', '=', $this->idPedido)->get();
         foreach($tallaje as $item) {
-            if ($item->PedPerEstado != "LISTO" && $item->PedPerEstado != "INACTIVO") {
+            if ($item->PedPerEstado != "ESPERA DE PRENDA" && $item->PedPerEstado != "INACTIVO") {
                 $count++;
             }
 
@@ -1739,7 +1739,7 @@ class Pedidos extends Component
             $this->confirmingTallajePersonasAdd = false;
 
         } else {
-            $errorCode = 'No se puede guardar, todas las personas deben tener estado "LISTO"';
+            $errorCode = 'No se puede guardar, todas las personas deben tener estado "ESPERA DE PRENDA"';
             $this->dispatchBrowserEvent('abrirMsjeFallido6', ['error' => $errorCode]);
         }
     } catch (QueryException $e) {
@@ -1860,10 +1860,13 @@ class Pedidos extends Component
 
 
 
+    $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecha);    
+    $fechaFinal1 = $fecha1->subMonths(3);
+ 
     $fechaAux1 = date('Y-m-d');
 
     if ($this->fecha1 !== "") {
-        $pedidosCliente->whereDate('PedidoFechaCreacion', '>=', $this->fecha1);
+        $pedidosCliente->whereDate('PedidoFechaCreacion', '>=', $fechaFinal1);
         $pedidosCliente->whereDate('PedidoFechaCreacion', '<=', $this->fecha1);
     } else {
         $pedidosCliente->whereDate('PedidoFechaCreacion', 'LIKE', "%{$fechaAux1}%");
