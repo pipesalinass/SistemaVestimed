@@ -205,9 +205,222 @@
                                             <a wire:click="confirmRecepcionDetalle( {{ $factura->RecepcionCabeceraId }} )" title="Visualizar Detalle" style="cursor:pointer">
                                                 <i class="fas fa-eye" style="color:#0a6ed3" title="Ver Detalle"></i>
                                             </a>   
-                                            <a wire:click="confirmPrendaPersona( {{ $factura->NumeroDocumentoExterno }} )" title="Visualizar Personas con prendas" style="cursor:pointer">
+                                            <a wire:click="confirmPrendaPersona( {{ $factura }} )" title="Visualizar Personas con prendas" style="cursor:pointer">
                                                 <i class="fas fa-plus" style="color:#0a6ed3" title="Visualizar Personas con prendas"></i>
                                             </a>   
+                                        </td>
+                                    </tr>
+                                @endforeach                     
+                                </tbody>
+                            </table>
+                        </div>
+                        </fieldset>
+                            @if ($facturas->hasPages())
+                            <div class="card-footer clearfix" style="background:#eeeeee7c ">
+                                {{ $facturas->links() }}
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+@endcan
+
+@can('Ver pedidos')
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="m-3">
+            <!-- Content Header (Page header) -->
+            <div class="content-header border-bottom border-success ">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-4 mb-2">
+                            <h1 class="m-0">Gestión de Post Pedidos</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-8">
+                            <div class="row" style="display: flex; justify-content: flex-end;">
+                                <div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </span>
+                                            </div>
+                                            <input wire:model="fecha1"type="date" class="form-control float-right" id="fecPrincipal">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                    @can('Ver pedidos admin')
+                                    <button type="button" class="btn btn-outline-primary btn-block waves-effect px-3"
+                                        wire:click="confirmPostPedidoAdd">
+                                        <i class=" fas fa-plus pr-2"></i><span>Nuevo</span>
+                                    </button>
+                                    @endcan
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                    @can('Ver pedidos admin')
+                                    <button type="button" class="btn btn-outline-primary btn-block waves-effect px-3"
+                                        wire:click="confirmBordadoAdd">
+                                        <i class=" fas fa-plus pr-2"></i><span>Bordado</span>
+                                    </button>
+                                    @endcan
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-1 col-lg-1">
+                                    <button type="button" class="btn btn-outline-primary"
+                                    wire:click="refrescar">
+                                    <i class="fas fa-redo"></i>
+                                </button>   
+                                </div>
+                            </div>
+                        </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <section class="content mt-3 border-bottom border-success">
+            <div class="container-fluid">
+                <!-- /.row -->
+                <div class="row" style="display: flex;
+                justify-content: space-around;">
+                    <div class="">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
+                                id="parcialClick1"
+                                wire:click="changeEstado1('RECEPCION_PARCIAL')"><i class="far fa-file"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Recepcion parcial</span>
+                                <span class="info-box-number" id="parcial1">{{$recepcion_parcial1}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1 text-white" style="cursor:pointer"
+                                id="finalizadaClick1"
+                                wire:click="changeEstado1('RECEPCION_FINALIZADA')"><i class="far fa-thumbs-up"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Recepcion finalizada</span>
+                                <span class="info-box-number" id="finalizada1">{{$recepcion_finalizada1}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
+                                id="enBordadoClick1"
+                                wire:click="changeEstado1('EN BORDADO')"><i class="far fa-file"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">En bordado</span>
+                                <span class="info-box-number" id="enBordado1">{{$en_bordado1}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+                    <div class="">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
+                                id="recibeBordadoClick1"
+                                wire:click="changeEstado1('RECIBE BORDADO')"><i class="fas fa-cog"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Recibe de bordado</span>
+                                <span class="info-box-number" id="recibeBordado1">{{$recibe_de_bordado1}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+                    <div class="">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
+                                id="entregadoClick1"
+                                wire:click="changeEstado1('ENTREGADO')"><i class="fas fa-cog"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Entregado</span>
+                                <span class="info-box-number" id="entregado1">{{$entregado1}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- /.content-header -->
+        <section class="content mt-3">
+            <div class="container-fluid">
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title col-5">Pedidos Realizados</h3>
+                                <div class="card-tools col-6" style="display: flex; justify-content: flex-end;">
+                                    <div class="input-group input-group-sm col-10">
+                                        <input type="text" name="table_search1" class="form-control float-right"
+                                            placeholder="Buscar" id="buscarTabla" wire:model="search">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default"><i class="fas fa-search"
+                                                    wire:model="search1"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <fieldset>
+
+                        <div class="card-body table-responsive p-0">                               
+                            <table class="table table-hover responsive table-sm display text-nowrap table-striped"
+                                id="tbOT">
+                                <thead style="text-align: center">
+                                    <tr>
+                                        <th>
+                                            <button wire:click="sortBy1('PedTitulo')">
+                                                Título
+                                            </button>
+                                        </th>
+                                        <th>
+                                            <button wire:click="sortBy1('FechaRecepcion')">
+                                                Fecha Recepción
+                                            </button>
+                                        </th>
+                                        <th>
+                                            <button wire:click="sortBy1('Estado')">
+                                                Estado
+                                            </button>
+                                        </th>
+                                        <th Colspan="3">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($facturasCliente as $key => $factura)
+                                    <tr>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->PedTitulo}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaRecepcion->format('d-m-Y')}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Estado}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">
+                                            <a wire:click="confirmRecepcionDetalle( {{ $factura->RecepcionCabeceraId }} )" title="Visualizar Detalle" style="cursor:pointer">
+                                                <i class="fas fa-eye" style="color:#0a6ed3" title="Ver Detalle"></i>
+                                            </a>  
+                                            <a wire:click="confirmPrendaPersonaCliente( {{ $factura }} )" title="Visualizar Personas con prendas" style="cursor:pointer">
+                                                <i class="fas fa-plus" style="color:#0a6ed3" title="Visualizar Personas con prendas"></i>
+                                            </a>      
                                         </td>
                                     </tr>
                                 @endforeach                     
@@ -778,13 +991,12 @@
 <!-- PrendaPersona modal -->
 <x-dialog-modal-general wire:model="confirmingPrendaPersona">
     <x-slot name="title">
-        {{ __('Recepción') }}
+        {{ __('Información Pedido') }}
     </x-slot>
 
     <x-slot name="content">
                 <!-- Información Cantidad Recibida -->
                 <fieldset class="form-group border p-3 scheduler-border">
-                    <legend class="w-auto px-2">Información Prenda Persona</legend>
                     <!-- Fecha Ingreso -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
@@ -825,4 +1037,55 @@
     </x-slot>
 </x-dialog-modal-general>
 <!-- PrendaPersona modal -->
+
+<!-- PrendaPersona VISTA CLIENTE modal -->
+<x-dialog-modal-general wire:model="confirmingPrendaPersonaCliente">
+    <x-slot name="title">
+        {{ __('Información Pedido') }}
+    </x-slot>
+
+    <x-slot name="content">
+                <!-- Información Cantidad Recibida -->
+                <fieldset class="form-group border p-3 scheduler-border">
+
+                    <!-- Fecha Ingreso -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <legend class="w-auto px-2">Prendas asociadas a Personas</legend>
+                                <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Persona Asociada</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($prendaPersona as $key => $list)
+                                <tr >
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->TipoPrendaPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CodigoModeloPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->TallaPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->ColorPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CantidadPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->PersonaAsociada}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>                                        
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+    </x-slot>
+
+    <x-slot name="footer">
+        <button type="button" class="btn btn-secondary" wire:click="cancelarPrendaPersonaCliente">
+            {{ __('Cerrar') }}
+        </button>
+    </x-slot>
+</x-dialog-modal-general>
+<!-- PrendaPersona VISTA CLIENTE modal -->
 
