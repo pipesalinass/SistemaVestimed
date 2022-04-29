@@ -317,21 +317,26 @@ class PostPedido extends Component
 
             $det = RecepcionDetalle::where('FK_RecepcionCabecera', '=', $fk)->get();
             $detalle1 = $det->where('TipoPrenda', '=', "Top");
-            //dd($detalle1);
-            
 
-            $detalle = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(CantidadRecibida) as suma'), 'prenda_personas.*', DB::raw('sum(CantidadPersona) as suma2'))
-                                        ->leftjoin('prenda_personas', 'recepcion_detalles.RecepcionDetalleId', '=', 'prenda_personas.FK_RecepcionDetalle')
+            
+            $detalle = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma2'))
+                                        ->where('FK_DocumentoExterno1', '=', $pedidoAsociadoBordado_form)
+                                        ->groupBy('CodigoModeloPersona', 'TallaPersona', 'TipoPrendaPersona', 'ColorPersona');
+
+            $detalleJoin = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(CantidadRecibida) as suma'), 'detalle.*')
+                                        ->leftJoinSub($detalle, 'detalle', function ($join) {
+                                            $join->on('recepcion_detalles.RecepcionDetalleId', '=', 'detalle.FK_RecepcionDetalle');
+                                        })
                                         ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
-                                        ->groupBy('CodigoModelo', 'Talla', 'TipoPrenda', 'Color',)
+                                        ->groupBy('CodigoModelo', 'Talla', 'TipoPrenda', 'Color')
                                         ->get();
-                                        //dd($detalle);
+                                        //dd($detalleJoin);
             $detalleTipo = RecepcionDetalle::select('TipoPrenda')
                                         ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                         ->groupBy('TipoPrenda')
                                         ->get();
             
-            foreach ($detalle as $item) {
+            foreach ($detalleJoin as $item) {
                 $a = array();
                 $a['id1'] = "";
                 $a['id'] = $item->RecepcionDetalleId;
