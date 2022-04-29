@@ -930,8 +930,16 @@
                                 class="fa fa-plus"></i></button>
                         </div>
                     </div>
-
-                    </fieldset>
+                </fieldset>
+                    <div class="form-row">
+                        <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
+                            role="alert" id="alertaCrudErrorPersonas12" style="display: none;">
+                            <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas12"></span>
+                            <button type="button" class="close" aria-label="Close" id="cerrarAlertCrudErrorPersonas12">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
 
                         <!-- Table row -->
            <div class="row">

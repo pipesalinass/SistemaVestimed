@@ -106,6 +106,7 @@ class PostPedido extends Component
     public $personaBordado;
     public $cantidadPrendaBordado;
     public $listaBordado = [];
+    public $idPrenda;
 
     //Variable para ordenar la lista de facturas
     public $sortBy = 'FK_Pedido';
@@ -900,10 +901,19 @@ class PostPedido extends Component
                                         });
         foreach ( $filtered_array as $key => $item) {
             $id = $key;
-        }          
-        $this->listaSumatoriaBordado[$key]['suma'] = $this->listaSumatoriaBordado[$key]['suma'] - 1;                     
+            $idRecepcionDetalle = $item['id'];
+        }
+        $this->idPrenda = $id;
+        $this->idRecepcionDetalle = $idRecepcionDetalle;
+        if (($this->listaSumatoriaBordado[$this->idPrenda]['suma'] - $this->cantidadPrendaBordado)<0) {
+            $errorCode = 'La cantidad seleccionada no puede ser mayor que la cantidad en stock';
+            $this->dispatchBrowserEvent('abrirMsjeFallido12', ['error' => $errorCode]);
+        } else {
+
+            $this->listaSumatoriaBordado[$key]['suma'] = $this->listaSumatoriaBordado[$key]['suma'] - $this->cantidadPrendaBordado;                     
             array_push($this->listaBordado,[
                 'id'                        => $id,
+                'idRecepcionDetalle'        => $this->idRecepcionDetalle,
                 'tipoBordado'               => $this->tipoBordado, 
                 'codigoModeloBordado'       => $this->codigoModeloBordado,
                 'tallaBordado'              => $this->tallaBordado,
@@ -911,9 +921,8 @@ class PostPedido extends Component
                 'personaBordado'            => $this->personaBordado,
                 'cantidadPrendaBordado'     => $this->cantidadPrendaBordado,
             ]);
-            
-            $this->reset('id', 'tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');        
-        
+        }    
+            $this->reset('id', 'tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');
     }
 
     public function quitarPrendaBordado($key){
@@ -931,7 +940,7 @@ class PostPedido extends Component
                     'ColorPersona'                             => $item['colorBordado'],
                     'PersonaAsociada'                          => $item['personaBordado'],
                     'CantidadPersona'                          => $item['cantidadPrendaBordado'],
-                    'FK_RecepcionDetalle'                      => $item['id'],
+                    'FK_RecepcionDetalle'                      => $item['idRecepcionDetalle'],
                     'EstadoPersona'                            => "EN BORDADO",
                     'FK_DocumentoExterno1'                     => $this->pedidoAsociadoBordado,
 

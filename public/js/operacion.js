@@ -183,6 +183,18 @@ $(document).ready(function(){
     });
 });
 
+$(document).ready(function(){
+    window.addEventListener('abrirMsjeFallido12', event => {
+        document.getElementById("mensajeCrudErrorPersonas12").textContent  = event.detail.error; 
+        document.getElementById("alertaCrudErrorPersonas12").style.display = "block";
+    })
+    $(document).on('click', '#cerrarAlertCrudErrorPersonas12', function(e){
+        e.preventDefault();
+        document.getElementById("mensajeCrudErrorPersonas12").textContent  = ''; 
+        document.getElementById("alertaCrudErrorPersonas12").style.display = "none";
+    });
+});
+
 // get elements
 var parent = document.querySelector('.parent');
 var column = document.querySelector('.column');
