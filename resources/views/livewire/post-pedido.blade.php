@@ -677,7 +677,6 @@
                         </div>
                     </div>
                 </fieldset>
-
     </x-slot>
 
     <x-slot name="footer">
@@ -968,7 +967,7 @@
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['cantidadPrendaBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['personaBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">
-                                <a wire:click="quitarPrendaBordado( {{ $key }} )" title="Quitar prenda" style="cursor:pointer">
+                                <a wire:click="quitarPrendaBordado( {{ $key }} )" title="Quitar relacion prenda persona" style="cursor:pointer">
                                     <i class="fas fa-minus-circle" style="color:#0a6ed3"></i>
                                 </a>  
                             </td>      
@@ -1018,6 +1017,7 @@
                                     <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Persona Asociada</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Estado</th>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1029,7 +1029,12 @@
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->ColorPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CantidadPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->PersonaAsociada}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>                                        
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <a wire:click="confirmEstadoPrendaPersona( {{ $list->prendaPersonaId }} )" title="Editar estado" style="cursor:pointer">
+                                            <i class="fas fa-edit" style="color:#0a6ed3"></i>
+                                        </a>  
+                                    </td>   
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -1045,6 +1050,50 @@
     </x-slot>
 </x-dialog-modal-general>
 <!-- PrendaPersona modal -->
+
+<!-- Editar estado prenda-persona modal -->
+<x-dialog-modal-general wire:model="confirmingEstadoPrendaPersona">
+    <x-slot name="title">
+        {{ __('Información Prenda-Persona') }}
+    </x-slot>
+
+    <x-slot name="content">
+                <!-- Información Cantidad Recibida -->
+                <fieldset class="form-group border p-3 scheduler-border">
+                    <legend class="w-auto px-2">Editar estado prenda</legend>
+                    <!-- Fecha Ingreso -->
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="est">Estado:</label>
+                                    <select class="form-control" id="est"
+                                    wire:model="estadoPrendaPersona">
+                                    <option>EN BORDADO</option>
+                                    <option>RECIBE DE BORDADO</option>
+                                    <option>ENTREGADO</option>
+                                    </select>
+                                    @error('estadoPrendaPersona')
+                                    <div class="text-danger">
+                                        <strong>Wow!</strong> <span id="mensajeCrudEstadoPrendaPersona">{{$message}}</span>
+                                    </div>
+                                    @enderror  
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+    </x-slot>
+
+    <x-slot name="footer">
+        <button type="button" class="btn btn-secondary" wire:click="cancelarEstadoPrendaPersona">
+            {{ __('Cancelar') }}
+        </button>
+
+        <button type="button" class="btn btn-primary" wire:click="updateEstadoPrendaPersona">
+            {{ __('Guardar') }}
+        </button>
+    </x-slot>
+</x-dialog-modal-general>
+<!-- Editar estado prenda-persona modal -->
 
 <!-- PrendaPersona VISTA CLIENTE modal -->
 <x-dialog-modal-general wire:model="confirmingPrendaPersonaCliente">

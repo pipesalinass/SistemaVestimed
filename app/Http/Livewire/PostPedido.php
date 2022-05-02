@@ -107,6 +107,7 @@ class PostPedido extends Component
     public $cantidadPrendaBordado;
     public $listaBordado = [];
     public $idPrenda;
+    public $estadoPrendaPersona;
 
     //Variable para ordenar la lista de facturas
     public $sortBy = 'FK_Pedido';
@@ -124,6 +125,7 @@ class PostPedido extends Component
     public $confirmingBordado = false;
     public $confirmingPrendaPersona = false;
     public $confirmingPrendaPersonaCliente = false;
+    public $confirmingEstadoPrendaPersona = false;
 
     public $idRecepcionCabecera;
     public $idRecepcionDetalle;
@@ -167,6 +169,7 @@ class PostPedido extends Component
         'colorBordado'                                  => ['required','string', 'exists:man_colors,ColNombre', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
         'idPersonaBordado'                              => ['numeric', 'exists:man_colors,ColorId'],        
         'personaBordado'                                => ['required','string', 'exists:man_modelos,ModCodigo', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
+        'estadoPrendaPersona'                           => ['required','string', 'regex:/^[A-Za-z0-9Ññ\s\.\ÁáÉéÍíÓóÚú]+$/'],
 
 
     ];
@@ -228,6 +231,8 @@ class PostPedido extends Component
         'colorBordado.regex'                             => 'El campo solamente acepta mayúsculas, minúsculas, espacios, "."',
         'colorBordado.exists'                            => 'El nombre no existe en el color del tipo de prenda',
 
+        'estadoPrendaPersona.required'                   => 'Debe seleccionar un estado.',
+        'estadoPrendaPersona.string'                     => 'El estado de prenda asociado a la persona debe ser alfa numérico.',
 
     ];
    
@@ -488,6 +493,14 @@ class PostPedido extends Component
     public function updatedCantidadRecibida($cantidadRecibida_form) {
         $this->validateOnly("cantidadRecibida");
         $this->cantidadRecibidaActualizada=1;
+    }
+
+    public function updatedPersonaBordado($personaBordado_form) {
+        $this->validateOnly("personaBordado");
+    }
+
+    public function updatedEstadoPrendaPersona($estadoPrendaPersona_form) {
+        $this->validateOnly("estadoPrendaPersona");
     }
 
     public function changeEstado($estado)
@@ -930,8 +943,26 @@ class PostPedido extends Component
             $this->reset('id', 'tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');
     }
 
-    public function quitarPrendaBordado($key){
-            unset($this->listaBordado[$key]);
+    public function quitarPrendaBordado($key1){
+        //dd($this);
+        $this->tipoBordado = $this->listaBordado[$key1]['tipoBordado'];
+        $this->codigoModeloBordado = $this->listaBordado[$key1]['codigoModeloBordado'];
+        $this->tallaBordado = $this->listaBordado[$key1]['tallaBordado'];
+        $this->colorBordado = $this->listaBordado[$key1]['colorBordado'];
+
+        $filtered_array = array_filter($this->listaSumatoriaBordado, function($val){
+            return ($val['TipoPrenda']==$this->tipoBordado and $val['ModCodigo']==$this->codigoModeloBordado 
+                                        and $val['TallajeTalla']==$this->tallaBordado  and $val['ColorPrenda']==$this->colorBordado);
+                                        });
+                                        //dd($filtered_array);
+        foreach ($filtered_array as $key => $item) {
+            $id = $key;
+        }
+        $this->cantidadPrendaBordado = $this->listaBordado[$key1]['cantidadPrendaBordado'];
+        $this->listaSumatoriaBordado[$id]['suma'] = $this->listaSumatoriaBordado[$id]['suma'] + $this->cantidadPrendaBordado;                     
+        unset($this->listaBordado[$key1]);
+        $this->reset('id', 'tipoBordado','codigoModeloBordado','tallaBordado','colorBordado','personaBordado','cantidadPrendaBordado');
+
     }
 
     public function enviarBordado() {
@@ -974,6 +1005,20 @@ class PostPedido extends Component
 
     public function cancelarPrendaPersonaCliente () {
         $this->confirmingPrendaPersonaCliente = false;
+    }
+
+    public function confirmEstadoPrendaPersona ($key) {
+        $this->confirmingEstadoPrendaPersona = true;
+        $this->idPrenda = $key;
+    }
+
+    public function updateEstadoPrendaPersona () {
+        PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['EstadoPersona' => $this->estadoPrendaPersona]);
+        $this->confirmingEstadoPrendaPersona = false;
+    }
+
+    public function cancelarEstadoPrendaPersona () {
+        $this->confirmingEstadoPrendaPersona = false;
     }
 
     public function render()
