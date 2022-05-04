@@ -1012,12 +1012,72 @@ class PostPedido extends Component
         $this->idPrenda = $key;
     }
 
-    public function updateEstadoPrendaPersona () {
+    public function updateEstadoPrendaPersona () {   
+        dd($this);   
+        $this->validateOnly('estadoPrendaPersona');
         PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['EstadoPersona' => $this->estadoPrendaPersona]);
+
+        $listado = ManTallajePersona::select(['man_tallaje_personas.*',DB::raw('count(*) as total'), 'op_pedidos_personas.*', 'man_modelos.*', 'op_pedidos_modelos.*', DB::raw('sum(cantidadPrenda) as suma'), 'man_pedidos_externos.*'])
+                                    ->leftjoin('op_pedidos_personas', 'man_tallaje_personas.FK_PedidoPersona', '=', 'op_pedidos_personas.PedidoPersonaId')
+                                    ->leftjoin('op_pedidos_modelos', 'man_tallaje_personas.FK_PedidoModelo', '=', 'op_pedidos_modelos.id')
+                                    ->leftjoin('man_modelos', 'op_pedidos_modelos.FK_Modelo', '=', 'man_modelos.ModeloId')
+                                    ->leftjoin('man_pedidos_externos', 'op_pedidos_personas.FK_pedido', '=', 'man_pedidos_externos.FK_Pedido')
+                                    ->where('man_pedidos_externos.NumPedidoExterno', '=', $this->idPedidoAsociadoBordado)
+                                    ->get();
+        foreach ($listado as $item) {
+            $suma = $item['suma'];
+        }
+
+        $listado2 = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
+                                 ->where('FK_DocumentoExterno1', '=', $this->idPedidoAsociadoBordado)
+                                 ->get();
+                                 //dd($listado2);
+        foreach ($listado2 as $item) {
+            $suma2 = $item['suma'];
+        }
+        $fk_pedido = ManPedidosExterno::select('FK_Pedido')
+                                      ->where('NumPedidoExterno', '=', $this->idPedidoAsociadoBordado)
+                                      ->get();
+        foreach ($fk_pedido as $item) {
+            $fk_pedido = $item->FK_Pedido;
+        }
+        if ($suma == $suma2) {
+            $listadoBordado = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
+                                            ->where('FK_DocumentoExterno1', '=', $this->idPedidoAsociadoBordado)
+                                            ->groupBy('CodigoModeloPersona', 'TallaPersona', 'TipoPrendaPersona', 'ColorPersona')
+                                            ->get();
+            $count = 0;
+            $count2 = 0;
+            $count3 = 0;
+            foreach ($listadoBordado as $item) {
+                if ($item['EstadoPersona'] == 'EN BORDADO') {
+                    $count++;
+                }
+                if ($item['EstadoPersona'] == 'RECIBE DE BORDADO') {
+                    $count2++;
+                }
+                if ($item['EstadoPersona'] == 'ENTREGADO') {
+                    $count3++;
+                }
+            }
+            if ($count > 0) {
+                OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'EN BORDADO']);
+                RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'EN BORDADO']);
+            } elseif ($count2 > 0) {
+                OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'RECIBE DE BORDADO']);
+                RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'RECIBE DE BORDADO']);
+            } elseif ($count3 > 0) {
+                OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'ENTREGADO']);
+                RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'ENTREGADO']);
+            }   
+        }
+
         $this->confirmingEstadoPrendaPersona = false;
+        $this->reset('estadoPrendaPersona');
     }
 
     public function cancelarEstadoPrendaPersona () {
+        $this->reset('estadoPrendaPersona');
         $this->confirmingEstadoPrendaPersona = false;
     }
 

@@ -1068,6 +1068,7 @@
                                 <label for="est">Estado:</label>
                                     <select class="form-control" id="est"
                                     wire:model="estadoPrendaPersona">
+                                    <option value="none" selected  hidden>Seleccione</option>
                                     <option>EN BORDADO</option>
                                     <option>RECIBE DE BORDADO</option>
                                     <option>ENTREGADO</option>
