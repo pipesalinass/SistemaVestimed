@@ -1334,8 +1334,6 @@ class Pedidos extends Component
 
     public function submit($temp)
     {
-        
-      
 
             $this->validateOnly('nombrePedido');
             $this->validateOnly('celularPedido');
@@ -1487,9 +1485,7 @@ class Pedidos extends Component
                     $this->dispatchBrowserEvent('abrirMsjeFallido7', ['error' => $errorCode]);
                 }
 
-            }
-   
-       
+            }     
     }
 
     public function submitEdit() {

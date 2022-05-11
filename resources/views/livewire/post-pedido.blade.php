@@ -41,7 +41,7 @@
                                     @can('Hacer pedidos')
                                     <button type="button" class="btn btn-outline-primary btn-block waves-effect px-3"
                                         wire:click="confirmBordadoAdd">
-                                        <i class=" fas fa-plus pr-2"></i><span>Bordado</span>
+                                        <i class=" fas fa-plus pr-2"></i><span>Asignación</span>
                                     </button>
                                     @endcan
                                 </div>
@@ -103,7 +103,7 @@
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-info elevation-1" style="cursor:pointer" id="CerradosClick"
                                 id="recibeBordadoClick"
-                                wire:click="changeEstado('RECIBE BORDADO')"><i class="fas fa-cog"></i></span>
+                                wire:click="changeEstado('RECIBE DE BORDADO')"><i class="fas fa-cog"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Recibe de bordado</span>
                                 <span class="info-box-number" id="recibeBordado">{{$recibe_de_bordado}}</span>
@@ -159,48 +159,43 @@
                                 id="tbOT">
                                 <thead style="text-align: center">
                                     <tr>
+                                        <th Colspan="1">Acción</th>
                                         <th>
-                                            <button wire:click="sortBy('FechaRecepcion')">
+                                            <button wire:click="sortBy('FechaRecepcion')" style="font-weight:bold;">
                                                 Fecha Recepción
                                             </button>
                                         </th>
                                         <th>
-                                            <button wire:click="sortBy('NumeroDocumentoExterno')">
+                                            <button wire:click="sortBy('NumeroDocumentoExterno')" style="font-weight:bold;">
                                                 Número documento externo
                                             </button>
                                         </th>
                                         <th>
-                                            <button wire:click="sortBy('NumeroFactura')">
+                                            <button wire:click="sortBy('NumeroFactura')" style="font-weight:bold;">
                                                 Número factura
                                             </button>
                                         </th>
                                         <th>
-                                            <button wire:click="sortBy('FechaDocumentoExterno')">
+                                            <button wire:click="sortBy('FechaDocumentoExterno')" style="font-weight:bold;">
                                                 Fecha documento externo
                                             </button>
                                         </th>
                                         <th>
-                                            <button wire:click="sortBy('Observacion')">
+                                            <button wire:click="sortBy('Observacion')" style="font-weight:bold;">
                                                 Observación
                                             </button>
                                         </th>
                                         <th>
-                                            <button wire:click="sortBy('Estado')">
+                                            <button wire:click="sortBy('Estado')" style="font-weight:bold;">
                                                 Estado
                                             </button>
                                         </th>
-                                        <th Colspan="3">Acción</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($facturas as $key => $factura)
                                     <tr>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaRecepcion->format('d-m-Y')}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->NumeroDocumentoExterno}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->NumeroFactura}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaDocumentoExterno->format('d-m-Y')}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Observacion}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Estado}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">
                                             <a wire:click="confirmRecepcionDetalle( {{ $factura->RecepcionCabeceraId }} )" title="Visualizar Detalle" style="cursor:pointer">
                                                 <i class="fas fa-eye" style="color:#0a6ed3" title="Ver Detalle"></i>
@@ -208,7 +203,14 @@
                                             <a wire:click="confirmPrendaPersona( {{ $factura }} )" title="Visualizar Personas con prendas" style="cursor:pointer">
                                                 <i class="fas fa-plus" style="color:#0a6ed3" title="Visualizar Personas con prendas"></i>
                                             </a>   
-                                        </td>
+                                        </td>                                        
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaRecepcion->format('d-m-Y')}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->NumeroDocumentoExterno}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->NumeroFactura}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaDocumentoExterno->format('d-m-Y')}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Observacion}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Estado}}</td>
+
                                     </tr>
                                 @endforeach                     
                                 </tbody>
@@ -390,6 +392,7 @@
                                 id="tbOT">
                                 <thead style="text-align: center">
                                     <tr>
+                                        <th Colspan="1">Acción</th>
                                         <th>
                                             <button wire:click="sortBy1('PedTitulo')">
                                                 Título
@@ -405,15 +408,12 @@
                                                 Estado
                                             </button>
                                         </th>
-                                        <th Colspan="3">Acción</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($facturasCliente as $key => $factura)
                                     <tr>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->PedTitulo}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaRecepcion->format('d-m-Y')}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Estado}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">
                                             <a wire:click="confirmRecepcionDetalle( {{ $factura->RecepcionCabeceraId }} )" title="Visualizar Detalle" style="cursor:pointer">
                                                 <i class="fas fa-eye" style="color:#0a6ed3" title="Ver Detalle"></i>
@@ -421,7 +421,11 @@
                                             <a wire:click="confirmPrendaPersonaCliente( {{ $factura }} )" title="Visualizar Personas con prendas" style="cursor:pointer">
                                                 <i class="fas fa-plus" style="color:#0a6ed3" title="Visualizar Personas con prendas"></i>
                                             </a>      
-                                        </td>
+                                        </td>                                        
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->PedTitulo}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->FechaRecepcion->format('d-m-Y')}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$factura->Estado}}</td>
+
                                     </tr>
                                 @endforeach                     
                                 </tbody>
@@ -533,6 +537,7 @@
                             <thead>
                                 <legend class="w-auto px-2">Prendas</legend>
                                 <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
@@ -540,20 +545,12 @@
                                     <th class="rounded border px-4 py-2" style="text-align: center">Cantidad Solicitada</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Recibida</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Cantidad Faltante</th>
-                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($listaSumatoria as $key => $sumatoria)
                                 @if ($sumatoria != null)
                                 <tr >
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">
                                         <a wire:click="confirmInsertarCantidad( {{ $key }} )" title="Insertar cantidad recibida" style="cursor:pointer">
                                             <i class="fas fa-plus" style="color:#0a6ed3" title="Insertar cantidad recibida"></i>
@@ -563,7 +560,15 @@
                                             <i class="fas fa-eye" style="color:#0a6ed3" title="Mostrar recepción anterior"></i>
                                         </a>   
                                         @endif   
-                                    </td>          
+                                    </td>                                     
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TipoPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ModCodigo']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['TallajeTalla']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['ColorPrenda']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['sumatoria']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadRecibida']}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$sumatoria['cantidadFaltante']}}</td>
+         
                                 </tr>
                                 @endif                           
                                 @endforeach
@@ -588,7 +593,7 @@
 </x-dialog-modal-general>
 <!-- Recepcion Facturas modal -->
 
-<!-- Recepcion Detalle modal -->
+<!-- Visualizar Recepcion Detalle modal -->
 <x-dialog-modal-general wire:model="confirmingRecepcionDetalle">
     <x-slot name="title">
         {{ __('Detalle Recepción') }}
@@ -640,7 +645,7 @@
         </button>
     </x-slot>
 </x-dialog-modal-general>
-<!-- Recepcion Detalle modal -->
+<!-- Visualizar Recepcion Detalle modal -->
 
 <!-- Insertar Cantidad Recibida modal -->
 <x-dialog-modal-general wire:model="confirmingDetalleEdit">
@@ -742,10 +747,10 @@
 </x-dialog-modal-general>
 <!-- Mostrar Recepcion Anterior modal -->
 
-<!-- Bordado Modal -->
+<!-- Asignación Modal -->
 <x-dialog-modal-general wire:model="confirmingBordado">
     <x-slot name="title">
-        {{ __('Bordado') }}
+        {{ __('Asignación') }}
     </x-slot>
 
     <x-slot name="content">
@@ -757,7 +762,7 @@
                 <div class="parent-grid-row-1">
                     <!-- Fecha Recepción Factura -->
                     <div class="form-group">
-                        <label for="fecPrincipal">Fecha envío a bordado:</label>
+                        <label for="fecPrincipal">Fecha asignación:</label>
                         <input wire:model="fechaBordado" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
                             >
                     </div>
@@ -947,30 +952,31 @@
                     <thead>
                         <legend class="w-auto px-2">Prendas</legend>
                         <tr>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Persona</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Acción</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Tipo</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Código modelo</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Talla</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Color</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Cantidad</th>
+                            <th class="rounded border px-4 py-2" style="text-align: center" style="font-weight:bold;">Persona</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($listaBordado as $key => $list)
                         @if ($sumatoria != null)
                         <tr >
+                            <td class="rounded border px-4 py-2" style="text-align: center">
+                                <a wire:click="quitarPrendaBordado( {{ $key }} )" title="Quitar relacion prenda persona" style="cursor:pointer">
+                                    <i class="fas fa-minus-circle" style="color:#0a6ed3"></i>
+                                </a>  
+                            </td>                               
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['tipoBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['codigoModeloBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['tallaBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['colorBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['cantidadPrendaBordado']}}</td>
                             <td class="rounded border px-4 py-2" style="text-align: center">{{$list['personaBordado']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">
-                                <a wire:click="quitarPrendaBordado( {{ $key }} )" title="Quitar relacion prenda persona" style="cursor:pointer">
-                                    <i class="fas fa-minus-circle" style="color:#0a6ed3"></i>
-                                </a>  
-                            </td>      
+   
                         </tr>
                         @endif                           
                         @endforeach
@@ -982,23 +988,23 @@
     </x-slot>
 
     <x-slot name="footer">
-        <button type="button" class="btn btn-secondary" wire:click="cancelarBordado">
+        <button type="button" class="btn btn-secondary" wire:click="cancelarAsignacion">
             {{ __('Cancelar') }}
         </button>
 
-        <button type="button" class="btn btn-primary" wire:click="enviarBordado">
-            {{ __('Enviar a bordado') }}
+        <button type="button" class="btn btn-primary" wire:click="enviarAsignacion">
+            {{ __('Asignar') }}
         </button>
 
 
     </x-slot>
 </x-dialog-modal-general>
-<!-- Bordado Modal -->
+<!-- Asignación Modal -->
 
 <!-- PrendaPersona modal -->
 <x-dialog-modal-general wire:model="confirmingPrendaPersona">
     <x-slot name="title">
-        {{ __('Información Pedido') }}
+        {{ __('Prendas asociadas a Personas') }}
     </x-slot>
 
     <x-slot name="content">
@@ -1008,8 +1014,8 @@
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
                             <thead>
-                                <legend class="w-auto px-2">Prendas asociadas a Personas</legend>
                                 <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Código modelo</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
@@ -1017,12 +1023,16 @@
                                     <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Persona Asociada</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Estado</th>
-                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($prendaPersona as $key => $list)
                                 <tr >
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <a wire:click="confirmEstadoPrendaPersona( {{ $list->prendaPersonaId }} )" title="Editar estado" style="cursor:pointer">
+                                            <i class="fas fa-edit" style="color:#0a6ed3"></i>
+                                        </a>  
+                                    </td>                                     
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->TipoPrendaPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CodigoModeloPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->TallaPersona}}</td>
@@ -1030,11 +1040,7 @@
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CantidadPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->PersonaAsociada}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">
-                                        <a wire:click="confirmEstadoPrendaPersona( {{ $list->prendaPersonaId }} )" title="Editar estado" style="cursor:pointer">
-                                            <i class="fas fa-edit" style="color:#0a6ed3"></i>
-                                        </a>  
-                                    </td>   
+  
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -1069,6 +1075,7 @@
                                     <select class="form-control" id="est"
                                     wire:model="estadoPrendaPersona">
                                     <option value="none" selected  hidden>Seleccione</option>
+                                    <option>ASIGNADO</option>
                                     <option>EN BORDADO</option>
                                     <option>RECIBE DE BORDADO</option>
                                     <option>ENTREGADO</option>

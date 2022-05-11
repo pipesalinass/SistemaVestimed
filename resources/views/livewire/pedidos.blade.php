@@ -187,19 +187,19 @@
                                             <a wire:click="confirmModeloAdd( {{ $pedido->PedidoId }} )" title="Agregar Modelo" style="cursor:pointer"><i class="fas fa-plus-circle" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                            @if ($pedido->PedEstado == 'GENERADO' || $pedido->PedEstado == 'EN TALLAJE' || $pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL')
+                                            @if ($pedido->PedEstado == 'GENERADO' || $pedido->PedEstado == 'EN TALLAJE' || $pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO')
                                             @can('Realizar Tallajes')   
                                             |       
                                             <a wire:click="confirmPersonaTallaje( {{ $pedido->PedidoId }} )" title="Agregar Tallaje" style="cursor:pointer"><i class="fas fa-user-tie" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL')
+                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO')
                                             @can('Realizar Tallajes')   
                                             |       
                                             <a wire:click="confirmSumatoria( {{ $pedido->PedidoId }} )" title="Ver Sumatoria" style="cursor:pointer"><i class="fas fa-cart-plus" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO' || $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL')
+                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO' || $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO')
                                             @can('Realizar Tallajes')   
                                             |       
                                             <a wire:click="confirmAsignarPedido( {{ $pedido->PedidoId }} )" title="Asignar Pedido Externo" style="cursor:pointer"><i class="fas fa-plus-square" style="color:#0a6ed3"></i></a>

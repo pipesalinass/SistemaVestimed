@@ -146,6 +146,7 @@ class PostPedido extends Component
     public function mount() {
         $this->fecha =  date('Y-m-d');
         $this->fecha1 =  date('Y-m-d');
+        $this->fechaBordado =  date('Y-m-d');
     }
 
     protected $rules = [
@@ -904,7 +905,7 @@ class PostPedido extends Component
     }
         
     //Funcion para cancelar al entrar al modal Bordado
-    public function cancelarBordado() {
+    public function cancelarAsignacion() {
         $this->confirmingBordado = false; 
         $this->reset([
             'listaSumatoriaBordado', 'pedidoAsociadoBordado', 'listaBordado',
@@ -913,6 +914,11 @@ class PostPedido extends Component
 
     //Funcion para agregar al arreglo bordado
     public function agregarPrendaBordado(){
+        $this->validateOnly('tipoBordado');
+        $this->validateOnly('codigoModeloBordado');
+        $this->validateOnly('tallaBordado');
+        $this->validateOnly('colorBordado');
+        //$this->validateOnly('personaBordado');
         $filtered_array = array_filter($this->listaSumatoriaBordado, function($val){
             return ($val['TipoPrenda']==$this->tipoBordado and $val['ModCodigo']==$this->codigoModeloBordado 
                                         and $val['TallajeTalla']==$this->tallaBordado  and $val['ColorPrenda']==$this->colorBordado);
@@ -965,8 +971,10 @@ class PostPedido extends Component
 
     }
 
-    public function enviarBordado() {
+    public function enviarAsignacion() {
         //dd($this);
+        try {
+
         if (count($this->listaBordado) > 0) {
             foreach ($this->listaBordado as $item) {
                 PrendaPersona::create([
@@ -977,7 +985,7 @@ class PostPedido extends Component
                     'PersonaAsociada'                          => $item['personaBordado'],
                     'CantidadPersona'                          => $item['cantidadPrendaBordado'],
                     'FK_RecepcionDetalle'                      => $item['idRecepcionDetalle'],
-                    'EstadoPersona'                            => "EN BORDADO",
+                    'EstadoPersona'                            => "ASIGNADO",
                     'FK_DocumentoExterno1'                     => $this->pedidoAsociadoBordado,
 
                     ]);           
@@ -987,6 +995,13 @@ class PostPedido extends Component
             ]);
             $this->confirmingBordado = false;
         }
+
+    } catch (QueryException $e) {
+        //$this->inicializando = false;
+        $errorCode = $e->errorInfo[1];
+        //$this->emitUp('OtAgregado'); //refrescamos la vista padre, tabla Ot para que aparezca la ot agregada
+        $this->dispatchBrowserEvent('abrirMsjeFallido', ['error' => $errorCode]);
+    }
     }
 
     public function confirmPrendaPersona ($factura) {
@@ -1012,8 +1027,7 @@ class PostPedido extends Component
         $this->idPrenda = $key;
     }
 
-    public function updateEstadoPrendaPersona () {   
-        dd($this);   
+    public function updateEstadoPrendaPersona () {     
         $this->validateOnly('estadoPrendaPersona');
         PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['EstadoPersona' => $this->estadoPrendaPersona]);
 
@@ -1031,7 +1045,6 @@ class PostPedido extends Component
         $listado2 = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
                                  ->where('FK_DocumentoExterno1', '=', $this->idPedidoAsociadoBordado)
                                  ->get();
-                                 //dd($listado2);
         foreach ($listado2 as $item) {
             $suma2 = $item['suma'];
         }
@@ -1084,7 +1097,6 @@ class PostPedido extends Component
     public function render()
     {
         $this->todayDate = Carbon::now()->format('Y-m-d');
-        $this->fechaBordado = Carbon::now()->format('Y-m-d');
 
         $facturas = RecepcionCabecera::select('recepcion_cabeceras.*')
                     ->orderBy($this->sortBy, $this->sortAsc ?  'ASC' : 'DESC');
@@ -1125,7 +1137,7 @@ class PostPedido extends Component
                 case "EN BORDADO":
                     $this->en_bordado = $total;
                     break;
-                case "RECIBE BORDADO":
+                case "RECIBE DE BORDADO":
                     $this->recibe_de_bordado = $total;
                     break;
                 case "ENTREGADO":
@@ -1140,8 +1152,7 @@ class PostPedido extends Component
                                             ->leftjoin('op_pedidos', 'recepcion_cabeceras.FK_Pedido', '=', 'op_pedidos.PedidoId')            
                                             ->leftjoin('users', 'op_pedidos.FK_user', '=', 'users.id')  
                                             ->where('FK_user', '=', auth()->user()->id)          
-                                            ->orderBy($this->sortBy, $this->sortAsc ?  'ASC' : 'DESC');
-                                            //dd($facturasCliente);   
+                                            ->orderBy($this->sortBy, $this->sortAsc ?  'ASC' : 'DESC');  
         $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecha1); 
         $fechaFinal1 = $fecha1->subMonths(3);
         $fechaAux1 = date('m-d-Y');
@@ -1178,7 +1189,7 @@ class PostPedido extends Component
                 case "EN BORDADO":
                     $this->en_bordado1 = $total;
                     break;
-                case "RECIBE BORDADO":
+                case "RECIBE DE BORDADO":
                     $this->recibe_de_bordado1 = $total;
                     break;
                 case "ENTREGADO":
@@ -1196,7 +1207,10 @@ class PostPedido extends Component
         } else {
             $pedidosAsociados = ManPedidosExterno::select('man_pedidos_externos.*', 'recepcion_cabeceras.*')
                                                  ->leftjoin('recepcion_cabeceras', 'man_pedidos_externos.NumPedidoExterno', '=', 'recepcion_cabeceras.NumeroDocumentoExterno')
+                                                 ->where('recepcion_cabeceras.Estado', '!=', 'EN BORDADO')
+                                                 ->where('recepcion_cabeceras.Estado', '!=', 'RECIBE DE BORDADO')
                                                  ->where('recepcion_cabeceras.Estado', '!=', 'RECEPCION_FINALIZADA')
+                                                 ->where('recepcion_cabeceras.Estado', '!=', 'ENTREGADO')
                                                  ->orwhere('recepcion_cabeceras.Estado', '=', null)
                                                  ->get();
         }
