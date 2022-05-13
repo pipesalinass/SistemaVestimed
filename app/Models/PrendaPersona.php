@@ -14,6 +14,6 @@ class PrendaPersona extends Model
 
 
     //para metodos CRUD 
-    protected $fillable = ['TipoPrendaPersona', 'CodigoModeloPersona', 'TallaPersona', 'ColorPersona', 'PersonaAsociada', 'FK_RecepcionDetalle', 'EstadoPersona', 'CantidadPersona', 'FK_DocumentoExterno1'];
+    protected $fillable = ['TipoPrendaPersona', 'CodigoModeloPersona', 'TallaPersona', 'ColorPersona', 'PersonaAsociada', 'FK_RecepcionDetalle', 'EstadoPersona', 'CantidadPersona', 'FK_DocumentoExterno1', 'FechaAsignado', 'FechaBordado', 'FechaRecibeBordado', 'FechaEntregado'];
     protected $dates = ['created_at', 'updated_at'];
 }

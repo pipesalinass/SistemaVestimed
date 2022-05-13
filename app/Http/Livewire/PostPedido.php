@@ -94,6 +94,7 @@ class PostPedido extends Component
     public $listaTallaBordado = [];
     public $listaColorBordado = [];
     public $listaPersonaBordado = [];
+    public $listaPedidos = [];
     public $idTipoBordado;
     public $tipoBordado;
     public $idCodigoModeloBordado;
@@ -354,6 +355,17 @@ class PostPedido extends Component
 
             $this->listaSumatoriaBordado[] = $a;
             }
+            $count = 0;
+            foreach ($this->listaSumatoriaBordado as $item) {
+                if($item['suma'] > 0) {
+                    $count++;
+                }
+            }
+            if ($count == 0) {
+                $errorCode = 'No existen prendas en stock por el momento';
+                $this->dispatchBrowserEvent('abrirMsjeFallido13', ['error' => $errorCode]);
+    
+            }
             //dd($detalle);
             foreach ($detalleTipo as $item) {
                 $a = array();
@@ -470,17 +482,34 @@ class PostPedido extends Component
                                     ->where('man_tallaje_personas.TallajeTalla', '=', $this->tallaBordado)
                                     ->where('man_colors.ColNombre', '=', $this->colorBordado)
                                     ->get();
+                                    //dd($persona);
 
         foreach ($persona as $item) {
-            $a = array();
-            $a['id1'] = "";
-            $a['primerNombre'] = $item->PedPerPrimerNombre;
-            $a['segundoNombre'] = $item->PedPerSegundoNombre;
-            $a['primerApellido'] = $item->PedPerPrimerApellido;
-            $a['segundoApellido'] = $item->PedPerSegundoApellido;
-            
-            $this->listaPersonaBordado[] = $a;                
+            $cantidadPrendas = $item->cantidadPrenda;
+            $nombre = $item->PedPerPrimerNombre." ".$item->PedPerSegundoNombre." ".$item->PedPerPrimerApellido." ".$item->PedPerSegundoApellido;
+            //dd($nombre);
+            $foo = preg_replace('/\s+/', ' ', $nombre);
+            $cantidad = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
+                                     ->where('TipoPrendaPersona', '=', $item->ManNombre)
+                                     ->where('CodigoModeloPersona', '=', $item->ModCodigo)
+                                     ->where('TallaPersona', '=', $item->TallajeTalla)
+                                     ->where('ColorPersona', '=', $item->ColNombre)
+                                     ->where('PersonaAsociada', '=', $foo)
+                                     ->first();
+
+            $cantidad = $cantidad->suma;
+            if($cantidadPrendas > $cantidad) {
+   
+                $a = array();
+                $a['id1'] = "";
+                $a['primerNombre'] = $item->PedPerPrimerNombre;
+                $a['segundoNombre'] = $item->PedPerSegundoNombre;
+                $a['primerApellido'] = $item->PedPerPrimerApellido;
+                $a['segundoApellido'] = $item->PedPerSegundoApellido;
+                
+                $this->listaPersonaBordado[] = $a;                
             }              
+        }
     }
 
     public function updatedNumeroFactura($numeroFactura_form) {
@@ -1029,6 +1058,20 @@ class PostPedido extends Component
 
     public function updateEstadoPrendaPersona () {     
         $this->validateOnly('estadoPrendaPersona');
+        //dd($this);
+        if ($this->estadoPrendaPersona == "ASIGNADO") {
+            PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['FechaAsignado' => $this->todayDate]);
+
+        } elseif ($this->estadoPrendaPersona == "EN BORDADO") {
+            PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['FechaBordado' => $this->todayDate]);
+           
+        } elseif ($this->estadoPrendaPersona == "RECIBE DE BORDADO") {
+            PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['FechaRecibeBordado' => $this->todayDate]);
+
+        } elseif ($this->estadoPrendaPersona == "ENTREGADO") {
+            PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['FechaEntregado' => $this->todayDate]);
+
+        }
         PrendaPersona::where('prendaPersonaId', '=', $this->idPrenda)->update(['EstadoPersona' => $this->estadoPrendaPersona]);
 
         $listado = ManTallajePersona::select(['man_tallaje_personas.*',DB::raw('count(*) as total'), 'op_pedidos_personas.*', 'man_modelos.*', 'op_pedidos_modelos.*', DB::raw('sum(cantidadPrenda) as suma'), 'man_pedidos_externos.*'])
@@ -1042,8 +1085,8 @@ class PostPedido extends Component
             $suma = $item['suma'];
         }
 
-        $listado2 = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
-                                 ->where('FK_DocumentoExterno1', '=', $this->idPedidoAsociadoBordado)
+        $listado2 = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(CantidadRecibida) as suma'))
+                                 ->where('FK_DocumentoExterno', '=', $this->idPedidoAsociadoBordado)
                                  ->get();
         foreach ($listado2 as $item) {
             $suma2 = $item['suma'];
@@ -1055,10 +1098,10 @@ class PostPedido extends Component
             $fk_pedido = $item->FK_Pedido;
         }
         if ($suma == $suma2) {
-            $listadoBordado = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
+            $listadoBordado = PrendaPersona::select('prenda_personas.*')
                                             ->where('FK_DocumentoExterno1', '=', $this->idPedidoAsociadoBordado)
-                                            ->groupBy('CodigoModeloPersona', 'TallaPersona', 'TipoPrendaPersona', 'ColorPersona')
                                             ->get();
+
             $count = 0;
             $count2 = 0;
             $count3 = 0;
@@ -1073,15 +1116,18 @@ class PostPedido extends Component
                     $count3++;
                 }
             }
+            
             if ($count > 0) {
                 OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'EN BORDADO']);
                 RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'EN BORDADO']);
-            } elseif ($count2 > 0) {
-                OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'RECIBE DE BORDADO']);
-                RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'RECIBE DE BORDADO']);
-            } elseif ($count3 > 0) {
-                OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'ENTREGADO']);
-                RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'ENTREGADO']);
+            } else
+                if ($count2 > 0) {
+                    OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'RECIBE DE BORDADO']);
+                    RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'RECIBE DE BORDADO']);
+            } else
+                if ($count3 > 0) {
+                    OpPedidos::where('PedidoId', '=', $fk_pedido)->update(['PedEstado' => 'ENTREGADO']);
+                    RecepcionCabecera::where('FK_Pedido', '=', $fk_pedido)->update(['Estado' => 'ENTREGADO']);
             }   
         }
 
@@ -1215,7 +1261,30 @@ class PostPedido extends Component
                                                  ->get();
         }
                                             
-        $pedidosAsociadosBordado = RecepcionDetalle::groupBy('FK_DocumentoExterno')->get();                                   
+        $pedidosAsociadosBordado = RecepcionDetalle::groupBy('FK_DocumentoExterno')->get();
+        foreach($pedidosAsociadosBordado as $item) {
+            $cantidad = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
+                                     ->where('FK_DocumentoExterno1', '=', $item->FK_DocumentoExterno)
+                                     ->first();
+            $cantidad = $cantidad->suma;
+
+            $listado = ManTallajePersona::select(['man_tallaje_personas.*',DB::raw('count(*) as total'), 'op_pedidos_personas.*', 'man_modelos.*', 'op_pedidos_modelos.*', DB::raw('sum(cantidadPrenda) as suma'), 'man_pedidos_externos.*'])
+                                        ->leftjoin('op_pedidos_personas', 'man_tallaje_personas.FK_PedidoPersona', '=', 'op_pedidos_personas.PedidoPersonaId')
+                                        ->leftjoin('op_pedidos_modelos', 'man_tallaje_personas.FK_PedidoModelo', '=', 'op_pedidos_modelos.id')
+                                        ->leftjoin('man_modelos', 'op_pedidos_modelos.FK_Modelo', '=', 'man_modelos.ModeloId')
+                                        ->leftjoin('man_pedidos_externos', 'op_pedidos_personas.FK_pedido', '=', 'man_pedidos_externos.FK_Pedido')
+                                        ->where('man_pedidos_externos.NumPedidoExterno', '=', $item->FK_DocumentoExterno)
+                                        ->first();
+            $listado = $listado->suma;
+            if ($cantidad != $listado) {
+                if(array_search($item->FK_DocumentoExterno, array_column($this->listaPedidos, 'nombre')) === false) {
+                    $a = array();
+                    $a['nombre'] = $item->FK_DocumentoExterno;
+                    
+                    $this->listaPedidos[] = $a;                
+                }
+            }
+        }
         $recepcionDetalle = RecepcionDetalle::where('FK_Pedido', '=', $this->FK_Pedido)
                                             ->orderBy('RecepcionDetalleId','desc')
                                             ->first();
@@ -1238,6 +1307,7 @@ class PostPedido extends Component
             'listaColorBordado'             => $this->listaColorBordado,
             'listaPersonaBordado'           => $this->listaPersonaBordado,
             'listaBordado'                  => $this->listaBordado,
+            'listaPedidos'                  => $this->listaPedidos,
             'recepcionDetalle'              => $recepcionDetalle,
             'prendaPersona'                 => $prendaPersona,
 

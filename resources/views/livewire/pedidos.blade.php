@@ -133,6 +133,7 @@
                                 id="tbOT">
                                 <thead style="text-align: center">
                                     <tr>
+                                        <th Colspan="1">Acción</th>
                                         <th>
                                             <button wire:click="sortBy('PedidoId')">
                                                 Número de pedido
@@ -158,7 +159,7 @@
                                                 Estado
                                             </button>
                                         </th>
-                                        <th Colspan="3">Acción</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -166,11 +167,6 @@
                                     @if ($pedido->PedEstado != 'INACTIVO')                
 
                                     <tr>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedidoId}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedTitulo}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedDescripcion}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedidoFechaCreacion->format('d-m-Y')}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedEstado}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">
                                             <a wire:click="confirmPedidoView( {{ $pedido->PedidoId }} )" title="Visualizar Pedido" style="cursor:pointer"><i class="fas fa-eye" style="color:#0a6ed3" title="Ver Pedido"></i></a>
 
@@ -187,25 +183,31 @@
                                             <a wire:click="confirmModeloAdd( {{ $pedido->PedidoId }} )" title="Agregar Modelo" style="cursor:pointer"><i class="fas fa-plus-circle" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                            @if ($pedido->PedEstado == 'GENERADO' || $pedido->PedEstado == 'EN TALLAJE' || $pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO')
+                                            @if ($pedido->PedEstado == 'GENERADO' || $pedido->PedEstado == 'EN TALLAJE' || $pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO' || $pedido->PedEstado == 'EN BORDADO')
                                             @can('Realizar Tallajes')   
                                             |       
                                             <a wire:click="confirmPersonaTallaje( {{ $pedido->PedidoId }} )" title="Agregar Tallaje" style="cursor:pointer"><i class="fas fa-user-tie" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO')
+                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO'|| $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO' || $pedido->PedEstado == 'EN BORDADO')
                                             @can('Realizar Tallajes')   
                                             |       
                                             <a wire:click="confirmSumatoria( {{ $pedido->PedidoId }} )" title="Ver Sumatoria" style="cursor:pointer"><i class="fas fa-cart-plus" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO' || $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO')
+                                            @if ($pedido->PedEstado == 'GESTION DE PEDIDO' || $pedido->PedEstado == 'ESPERA DE PRENDAS' || $pedido->PedEstado == 'RECEPCION_PARCIAL' || $pedido->PedEstado == 'RECEPCION_FINALIZADA' || $pedido->PedEstado == 'RECIBE DE BORDADO' || $pedido->PedEstado == 'ENTREGADO' || $pedido->PedEstado == 'EN BORDADO')
                                             @can('Realizar Tallajes')   
                                             |       
                                             <a wire:click="confirmAsignarPedido( {{ $pedido->PedidoId }} )" title="Asignar Pedido Externo" style="cursor:pointer"><i class="fas fa-plus-square" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                        </td>
+                                        </td>                                        
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedidoId}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedTitulo}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedDescripcion}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedidoFechaCreacion->format('d-m-Y')}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedEstado}}</td>
+
                                     </tr>
                                     @endif                                    
                                     @endforeach                     
@@ -347,6 +349,7 @@
                                 id="tbOT">
                                 <thead style="text-align: center">
                                     <tr>
+                                        <th Colspan="1">Acción</th>
                                         <th>
                                             <button wire:click="sortBy1('PedTitulo')">
                                                 Título
@@ -367,17 +370,12 @@
                                                 Estado
                                             </button>
                                         </th>
-                                        <th Colspan="3">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($pedidosCliente as $key => $pedido)
                                     @if ($pedido->PedEstado != 'INACTIVO')   
                                     <tr>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedTitulo}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedDescripcion}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedidoFechaCreacion->format('d-m-Y')}}</td>
-                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedEstado}}</td>
                                         <td class="rounded border px-4 py-2" style="text-align: center">
                                             <a wire:click="confirmPedidoView( {{ $pedido->PedidoId }} )" title="Visualizar Pedido" style="cursor:pointer"><i class="fas fa-eye" style="color:#0a6ed3" title="Ver Pedido"></i></a>
                                             @if ($pedido->PedEstado == 'BORRADOR')
@@ -406,7 +404,12 @@
                                             <a wire:click="confirmSumatoria( {{ $pedido->PedidoId }} )" title="Ver sumatoria" style="cursor:pointer"><i class="fas fa-user-tie" style="color:#0a6ed3"></i></a>
                                             @endcan
                                             @endif
-                                        </td>
+                                        </td>                                        
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedTitulo}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedDescripcion}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedidoFechaCreacion->format('d-m-Y')}}</td>
+                                        <td class="rounded border px-4 py-2" style="text-align: center">{{$pedido->PedEstado}}</td>
+
                                     </tr>
                                     @endif    
                                 @endforeach                     
@@ -646,6 +649,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th class="rounded border px-4 py-2" style="text-align: center">Acciones</th>
                                             <th class="align-middle col-md-2" style="display: none;">Id User</th>
                                             <th class="rounded border px-4 py-2" style="text-align: center">Nombre</th>
                                             <th class="rounded border px-4 py-2" style="text-align: center">Mail</th>
@@ -653,26 +657,24 @@
                                             @can('Ver estado')
                                             <th class="rounded border px-4 py-2" style="text-align: center">Estado</th>
                                             @endcan
-                                            <th class="rounded border px-4 py-2" style="text-align: center">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @can('Ver estado')
                                         @foreach($listaPersona as $key => $persona)
                                             <tr >
+                                                @can('Quitar personas')
+                                                <td class="rounded border px-4 py-2" style="text-align: center">  
+                                                    <a wire:click="quitarPersona( {{$key}} )" title="Quitar Persona" class="mr-2" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>
+                                                    |
+                                                    <a wire:click="editarPersona( {{$key}} )" title="Editar Persona" class="ml-2" style="cursor:pointer"><i class="fas fa-edit" style="color:#0a6ed3"></i></a>
+                                                </td>
+                                                @endcan                                                
                                                 <td style="display: none;">{{$persona['rut']}}</td>
                                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['primerNombre'].' '.$persona['segundoNombre'].' '.$persona['primerApellido'].' '.$persona['segundoApellido']}}</td>
                                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['mail']}}</td>
                                                 <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['celular']}}</td>
-                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['estado']}}</td>
-                                                @can('Quitar personas')
-                                                <td class="rounded border px-4 py-2" style="text-align: center">  
-                                                    <a wire:click="quitarPersona( {{$key}} )" title="Quitar Persona" class="mr-2" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>   
-                                                    |
-                                                    <a wire:click="editarPersona( {{$key}} )" title="Editar Persona" class="ml-2" style="cursor:pointer"><i class="fas fa-edit" style="color:#0a6ed3"></i></a>
-                                                </td>
-                                                @endcan
-                                               
+                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['estado']}}</td>                                        
                                             </tr>
                                         @endforeach
                                         @endcan
@@ -680,18 +682,17 @@
                                         @can('No Ver estado')
                                         @foreach($listaPersona as $key => $persona)
                                             <tr >
-                                                <td style="display: none;">{{$persona['rut']}}</td>
-                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['primerNombre'].' '.$persona['segundoNombre'].' '.$persona['primerApellido'].' '.$persona['segundoApellido']}}</td>
-                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['mail']}}</td>
-                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['celular']}}</td>
                                                 @can('Quitar personas')
                                                 <td class="rounded border px-4 py-2" style="text-align: center">  
                                                     <a wire:click="quitarPersona( {{$key}} )" title="Quitar Persona" class="mr-2" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>   
                                                     |
                                                     <a wire:click="editarPersona( {{$key}} )" title="Editar Persona" class="ml-2" style="cursor:pointer"><i class="fas fa-edit" style="color:#0a6ed3"></i></a>
                                                 </td>
-                                                @endcan
-                                               
+                                                @endcan                                                
+                                                <td style="display: none;">{{$persona['rut']}}</td>
+                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['primerNombre'].' '.$persona['segundoNombre'].' '.$persona['primerApellido'].' '.$persona['segundoApellido']}}</td>
+                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['mail']}}</td>
+                                                <td class="rounded border px-4 py-2" style="text-align: center">{{$persona['celular']}}</td>       
                                             </tr>
                                         @endforeach
                                         @endcan
@@ -1233,19 +1234,16 @@
                     <table class="table table-striped" id="tbDetalleOT col-md-2">
                         <thead>
                             <tr>
+                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Código</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Modelo</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Estado</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($modelos as $key => $mod)
                                 @if ($mod->ModEstado == 'Disponible')
                                 <tr>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $mod->ModCodigo }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $mod->ModNombre }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $mod->ModEstado }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">
                                         @can('Anular modelos') 
                                         <a wire:click="quitarModelo( {{$mod->ModeloId}} )" title="Anular Modelo" class="mr-2" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>
@@ -1256,7 +1254,11 @@
                                         @endcan                                        
                                         <input class="mb-1 mr-2" type="radio" name="modelo"
                                             wire:click="seleccionados({{$mod->ModeloId}})">
-                                    </td>
+                                    </td>                                    
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $mod->ModCodigo }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $mod->ModNombre }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $mod->ModEstado }} </td>
+
                                 </tr>
                                 @endif
                             @endforeach
@@ -1363,17 +1365,15 @@
                         <table class="table table-striped" id="tbDetalleOT col-md-2">
                             <thead>
                                 <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Estado</th>
-                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($colores as $key => $col)
                                     @if ($col->ColEstado == 'Disponible')
                                 <tr>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $col->ColNombre }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $col->ColEstado }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">
                                         @can('Anular colores')  
                                         <a wire:click="quitarColor( {{$col->ColorId}} )" title="Anular Color" class="mr-2" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>
@@ -1384,7 +1384,10 @@
                                         @endcan
                                         <input class="mb-1" type="radio" name="color" wire:click="seleccionadosColor( {{$col->ColorId}} )">  
                                  
-                                    </td>
+                                    </td>                                    
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $col->ColNombre }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $col->ColEstado }} </td>
+
                                 </tr>
                                     @endif
                                 @endforeach                                
@@ -1413,29 +1416,30 @@
                         <table class="table table-striped" id="tbDetalleOT col-md-2">
                             <thead>
                                 <tr>
+                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Código</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Modelo</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center; display: none;">FK_Modelo</th>
                                     <th class="rounded border px-4 py-2" style="text-align: center; display: none;">FK_Color</th>
-                                    <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($listaVinculacion as $key => $vinculacion)
                                 <tr>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $vinculacion['Codigo'] }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $vinculacion['Modelo'] }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $vinculacion['Color'] }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center; display: none;"> {{ $vinculacion['FK_Modelo'] }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center; display: none;"> {{ $vinculacion['FK_Color'] }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">
                                         @can('Quitar vinculacion modelo persona')
                                             
                                         <a wire:click="quitarVinculacion( {{$key}} )" title="Quitar Vinculación" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"></i></a>      
                                         @endcan   
                                       
-                                    </td>
+                                    </td>                                    
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $vinculacion['Codigo'] }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $vinculacion['Modelo'] }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center"> {{ $vinculacion['Color'] }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center; display: none;"> {{ $vinculacion['FK_Modelo'] }} </td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center; display: none;"> {{ $vinculacion['FK_Color'] }} </td>
+
                                 </tr>
                                 @endforeach                         
                             </tbody>
@@ -1484,25 +1488,26 @@
                     <table class="table table-striped" id="tbDetalleOT col-md-2">
                         <thead>
                             <tr>
+                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Nombre</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Mail</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Celular</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Estado</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             @can('Ver estado')
                             @foreach ($pedidoPersonas as $key => $persona) 
                                 <tr>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <a wire:click="confirmTallajeAdd( {{ $persona->PedidoPersonaId }} )" title="Agregar Prenda" style="cursor:pointer"><i class="fas fa-plus-circle" style="color:#0a6ed3"></i></a>
+                                    </td>                                    
                                     <td style="display: none;">{{$persona->PedPerRut}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerPrimerNombre.' '.$persona->PedPerSegundoNombre.' '.$persona->PedPerPrimerApellido.' '.$persona->PedPerSegundoApellido }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerMail }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerCelular }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerEstado }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">
-                                        <a wire:click="confirmTallajeAdd( {{ $persona->PedidoPersonaId }} )" title="Agregar Prenda" style="cursor:pointer"><i class="fas fa-plus-circle" style="color:#0a6ed3"></i></a>
-                                    </td>
+
                                 </tr>      
                             @endforeach
                             @endcan
@@ -1510,14 +1515,15 @@
                             @can('No Ver estado')
                             @foreach ($pedidoPersonas as $key => $persona) 
                                 <tr>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <a wire:click="confirmTallajeAdd( {{ $persona->PedidoPersonaId }} )" title="Agregar Prenda" style="cursor:pointer"><i class="fas fa-plus-circle" style="color:#0a6ed3"></i></a>
+                                    </td>                                    
                                     <td style="display: none;">{{$persona->PedPerRut}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerPrimerNombre.' '.$persona->PedPerSegundoNombre.' '.$persona->PedPerPrimerApellido.' '.$persona->PedPerSegundoApellido }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerMail }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerCelular }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $persona->PedPerEstado }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">
-                                        <a wire:click="confirmTallajeAdd( {{ $persona->PedidoPersonaId }} )" title="Agregar Prenda" style="cursor:pointer"><i class="fas fa-plus-circle" style="color:#0a6ed3"></i></a>
-                                    </td>
+
                                 </tr>      
                             @endforeach
                             @endcan
@@ -1678,30 +1684,31 @@
                     <thead>
                         <legend class="w-auto px-2">Prendas</legend>
                         <tr>
+                            <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Tipo</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Código Modelo</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Modelo</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Talla</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Color</th>
                             <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
-                            <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($listaTallaje as $key => $tallaje)
-                        <tr >
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Tipo']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['CodigoModelo']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Modelo']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Talla']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Color']}}</td>
-                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['cantidadPrenda']}}</td>
+                        <tr>
                             <td class="rounded border px-4 py-2" style="text-align: center">
                                 <a wire:click="editarPrenda({{ $key }})" title="Editar Prenda" class="mr-2" style="cursor:pointer"><i class="fas fa-edit"
                                     style="color:   #0a6ed3 "></i></a>
                                 <a wire:click="quitarPrenda({{ $key }})" title="Quitar Prenda"class="mr-2" style="cursor:pointer"><i class="fas fa-minus-circle text-primary"
                                     style="color:   #0a6ed3 "></i></a>
                             </td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Tipo']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['CodigoModelo']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Modelo']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Talla']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['Color']}}</td>
+                            <td class="rounded border px-4 py-2" style="text-align: center">{{$tallaje['cantidadPrenda']}}</td>
+
 
                         </tr>
                         @endforeach
@@ -2190,21 +2197,22 @@
                     <table class="table table-striped" id="tbDetalleOT col-md-2">
                         <thead>
                             <tr>
+                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Número Pedido</th>
                                 <th class="rounded border px-4 py-2" style="text-align: center">Observación</th>
-                                <th class="rounded border px-4 py-2" style="text-align: center">Acción</th>
 
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($pedidosExterno as $key => $pedido) 
                                 <tr>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <a wire:click="confirmAsignarPedidoEdit( {{ $pedido->PedidoExternoId }} )" title="Editar Pedido Externo" style="cursor:pointer"><i class="fas fa-edit" style="color:#0a6ed3"></i></a>
+                                    </td>                                    
                                     <td style="display: none;">{{$pedido->PedidoExternoId}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $pedido->NumPedidoExterno }} </td>
                                     <td class="rounded border px-4 py-2" style="text-align: center"> {{ $pedido->ObsPedidoExterno }} </td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">
-                                        <a wire:click="confirmAsignarPedidoEdit( {{ $pedido->PedidoExternoId }} )" title="Editar Pedido Externo" style="cursor:pointer"><i class="fas fa-edit" style="color:#0a6ed3"></i></a>
-                                    </td>
+
                                 </tr>      
                             @endforeach
                         </tbody>

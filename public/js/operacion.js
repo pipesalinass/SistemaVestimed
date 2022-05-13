@@ -195,6 +195,24 @@ $(document).ready(function(){
     });
 });
 
+$(document).ready(function(){
+    window.addEventListener('abrirMsjeFallido13', event => {
+        document.getElementById("mensajeCrudErrorPersonas13").textContent  = event.detail.error; 
+        document.getElementById("alertaCrudErrorPersonas13").style.display = "block";
+    })
+    $(document).on('click', '#cerrarAlertCrudErrorPersonas13', function(e){
+        e.preventDefault();
+        document.getElementById("mensajeCrudErrorPersonas13").textContent  = ''; 
+        document.getElementById("alertaCrudErrorPersonas13").style.display = "none";
+    });
+});
+
+
+$(document).ready(function () {
+   $('[data-toggle="mensaje"]').tooltip()
+});
+
+
 // get elements
 var parent = document.querySelector('.parent');
 var column = document.querySelector('.column');

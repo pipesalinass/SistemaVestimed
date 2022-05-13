@@ -771,9 +771,9 @@
                         <label for="pedAsociado">Pedido Externo Asociado:</label>
                         <select class="form-control" id="pedAsociado" name="pedAsociado"
                         wire:model="pedidoAsociadoBordado">
-                        @foreach ($pedidosAsociadosBordado as $key => $prenda)
+                        @foreach ($listaPedidos as $key => $prenda)
                             <option value="none" selected  hidden>Seleccione</option>
-                            <option> {{$prenda->FK_DocumentoExterno}} </option>
+                            <option> {{$prenda['nombre']}} </option>
                         @endforeach
                         @error('pedidoAsociado')
                         <div class="text-danger">
@@ -794,6 +794,15 @@
                     role="alert" id="alertaCrudErrorPersonas10" style="display: none;">
                     <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas10"></span>
                     <button type="button" class="close" aria-label="Close" id="cerrarAlertCrudErrorPersonas10">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
+                    role="alert" id="alertaCrudErrorPersonas13" style="display: none;">
+                    <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas13"></span>
+                    <button type="button" class="close" aria-label="Close" id="cerrarAlertCrudErrorPersonas13">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -1039,8 +1048,13 @@
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->ColorPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CantidadPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->PersonaAsociada}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>
-  
+                                    <td class="rounded border px-4 py-2" style="text-align: center">
+                                        <div data-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+                                            {{$list->EstadoPersona}}        
+                                        </div>
+                                        
+                                    </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -1154,3 +1168,17 @@
 </x-dialog-modal-general>
 <!-- PrendaPersona VISTA CLIENTE modal -->
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        Livewire.hook('message.processed', (message, component) => {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        })
+    });
+</script>
