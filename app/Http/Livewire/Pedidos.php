@@ -1547,8 +1547,7 @@ class Pedidos extends Component
     }
 
     public function saveVinculacion()
-    {
-        
+    {      
         try {
 
             $listado = OpPedidosModelo::where('FK_Pedido', '=', $this->idPedido)->get();
@@ -1674,9 +1673,6 @@ class Pedidos extends Component
     }
 
     public function savePrenda($temporal) {
-        
-       
-
         if (count($this->listaTallaje) > 0) {
             ManTallajePersona::where('FK_PedidoPersona', '=', $this->idPedidoPersona)->delete();
             foreach ($this->listaTallaje as $key => $prenda) {
@@ -1715,13 +1711,10 @@ class Pedidos extends Component
         if ($count > 0) {
             OpPedidos::where('PedidoId', '=', $this->idPedido)->update(['PedEstado' => 'EN TALLAJE']);
         }
-
-
     }
 
     public function saveTallaje() {
         try {
-
         $count = 0;
         $tallaje = OpPedidosPersona::where('FK_pedido', '=', $this->idPedido)->get();
         foreach($tallaje as $item) {

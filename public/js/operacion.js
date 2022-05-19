@@ -246,3 +246,20 @@ offsetValues.forEach( function(offsetValue, i) {
     cloneContent.style.position = 'relative';
     cloneContent.style.top = '-' + offsetValue + 'px';
 });
+
+
+$(document).ready(function() {
+
+    // ...
+  
+    // Enable Bootstrap tooltips on page load
+    $('[data-toggle="tooltip"]').tooltip();
+  
+    // Ensure Livewire updates re-instantiate tooltips
+    if (typeof window.Livewire !== 'undefined') {
+      window.Livewire.hook('message.processed', (message, component) => {
+          $('[data-toggle="tooltip"]').tooltip('dispose').tooltip();
+      });
+    }
+  
+  });

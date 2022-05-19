@@ -1021,6 +1021,12 @@
                 <fieldset class="form-group border p-3 scheduler-border">
                     <!-- Fecha Ingreso -->
                     <div class="card-body table-responsive p-0">
+                        @if (!$prendaPersona->count())
+                        <div>
+                            <p style="text-align:center;">No hay asignaciones por el momento.
+                            </p>
+                        </div>
+                        @else
                         <table class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
@@ -1032,6 +1038,10 @@
                                     <th class="rounded border px-4 py-2" style="text-align: center">Cantidad</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Persona Asociada</th>
                                     <th class="rounded border px-2 py-2" style="text-align: center">Estado</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Fecha Asignación</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Fecha Bordado</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Fecha Recibe de Bordado</th>
+                                    <th class="rounded border px-2 py-2" style="text-align: center">Fecha Entregado</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1048,19 +1058,33 @@
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->ColorPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->CantidadPersona}}</td>
                                     <td class="rounded border px-4 py-2" style="text-align: center">{{$list->PersonaAsociada}}</td>
-                                    <td class="rounded border px-4 py-2" style="text-align: center">
-                                        <div data-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
-                                            {{$list->EstadoPersona}}        
-                                        </div>
-                                        
-                                    </td>
-
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->EstadoPersona}}</td>                                  
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->FechaAsignado}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->FechaBordado}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->FechaRecibeBordado}}</td>
+                                    <td class="rounded border px-4 py-2" style="text-align: center">{{$list->FechaEntregado}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        @endif
+                        <div class="collapse" id="collapseExample">
+                            <div>
+                                fecha de envio a bordado:
+                            </div> 
+                            <div>
+                                fecha de recibo de bordado:
+                            </div> 
+                            <div>
+                                fecha de entrega:
+                            </div>
+
+                        </div>
                     </div>
                 </fieldset>
+                <div class="tooltip top">Posa el ratón encima de mi
+                    <span class="tiptext">Texto del tooltip</span>
+                </div>
     </x-slot>
 
     <x-slot name="footer">
