@@ -22,6 +22,9 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('css/my_css.css') }}">
 
+        <!-- Toastr -->
+        <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+
         <script src="https://unpkg.com/vue"></script>
         <script src="https://unpkg.com/@hcaptcha/vue-hcaptcha"></script>
        
@@ -37,6 +40,7 @@
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
         <script src="{{ ('plugins/jquery/jquery.min.js') }}" defer></script>
+        <script src="{{ asset('plugins/toastr/toastr.min.js') }}" defer></script>
         <script src="{{ ('vendor/bootstrap/js/bootstrap.bundle.min.js') }}" defer></script>
         <script src="{{ ('vendor/adminlte/dist/js/adminlte.min.js') }}" defer></script>
  
@@ -51,7 +55,19 @@
 
         
         <script src="{{ ('js/operacion.js') }}" defer></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
         
+                Livewire.hook('message.processed', (message, component) => {
+                    $(function () {
+                        $('[data-toggle="tooltip"]').tooltip()
+                    })
+                })
+            });
+        </script> 
         <!-- Recaptcha -->
     </head>
     <body class="font-sans antialiased">

@@ -76,6 +76,7 @@ class Pedidos extends Component
     public $idCarrera = 1;
     public $carreraPedido = "No Aplica";
     public $descripcionPedido = "";
+    public $fechaCreacion = "";
 
     /**Variables iniciales PedidoPersona */
     public $rutPedidoPersona = "";
@@ -850,6 +851,7 @@ class Pedidos extends Component
         $this->celularPedido = $persona->NumeroContacto;
         $this->tituloPedido = $pedido->PedTitulo;
         $this->descripcionPedido = $pedido->PedDescripcion;
+        $this->fechaCreacion = $pedido->PedidoFechaCreacion->format('Y-m-d');
 
         $listado = OpPedidosPersona::where('FK_pedido', '=', $pedido->PedidoId)->get();
         //dd($listado);

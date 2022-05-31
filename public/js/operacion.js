@@ -263,3 +263,7 @@ $(document).ready(function() {
     }
   
   });
+
+  Livewire.onLoad(() => {
+    $('[data-toggle="tooltip"]').tooltip()
+})

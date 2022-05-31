@@ -85,6 +85,7 @@ class PostPedido extends Component
     public $listaAnterior = [];
 
     /**Variables iniciales bordado */
+    public $idPedido;
     public $fechaPedidoExternoBordado;
     public $fechaBordado;
     public $pedidoAsociadoBordado;
@@ -110,6 +111,7 @@ class PostPedido extends Component
     public $listaBordado = [];
     public $idPrenda;
     public $estadoPrendaPersona;
+    public $estadoInputPedidoExternoAsociado=0;
 
     //Variable para ordenar la lista de facturas
     public $sortBy = 'FK_Pedido';
@@ -315,6 +317,7 @@ class PostPedido extends Component
         $pedidoAsociadoBordado = RecepcionDetalle::where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
                                                     ->groupBy('FK_DocumentoExterno')->first();    
         if ($pedidoAsociadoBordado) {
+            $this->estadoInputPedidoExternoAsociado = 1;
             $pedido = $pedidoAsociadoBordado->FK_DocumentoExterno;
             $fecha = ManPedidosExterno::where('NumPedidoExterno', '=', $pedidoAsociadoBordado_form)->first();
             $this->fechaPedidoExternoBordado = $fecha->created_at->format('Y-m-d');
@@ -324,18 +327,19 @@ class PostPedido extends Component
 
             $det = RecepcionDetalle::where('FK_RecepcionCabecera', '=', $fk)->get();
             $detalle1 = $det->where('TipoPrenda', '=', "Top");
+            $this->idPedido = ManPedidosExterno::select('FK_Pedido')->where('NumPedidoExterno', '=', $this->pedidoAsociadoBordado)->first();
+            $this->idPedido = $this->idPedido->FK_Pedido;
 
-            
             $detalle = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma2'))
                                         ->where('FK_DocumentoExterno1', '=', $pedidoAsociadoBordado_form)
                                         ->groupBy('CodigoModeloPersona', 'TallaPersona', 'TipoPrendaPersona', 'ColorPersona');
 
-            $detalleJoin = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(CantidadRecibida) as suma'), 'detalle.*')
+            $detalleJoin = RecepcionDetalle::select('recepcion_detalles.*', DB::raw('sum(recepcion_detalles.CantidadRecibida) as suma'), 'detalle.*',)
                                         ->leftJoinSub($detalle, 'detalle', function ($join) {
                                             $join->on('recepcion_detalles.RecepcionDetalleId', '=', 'detalle.FK_RecepcionDetalle');
                                         })
                                         ->where('FK_DocumentoExterno', '=', $pedidoAsociadoBordado_form)
-                                        ->groupBy('CodigoModelo', 'Talla', 'TipoPrenda', 'Color')
+                                        ->groupBy('CodigoModelo', 'Talla', 'TipoPrenda', 'Color', )
                                         ->get();
                                         //dd($detalleJoin);
             $detalleTipo = RecepcionDetalle::select('TipoPrenda')
@@ -351,7 +355,10 @@ class PostPedido extends Component
                 $a['ModCodigo'] = $item->CodigoModelo;
                 $a['TipoPrenda'] = $item->TipoPrenda;
                 $a['ColorPrenda'] = $item->Color;
+                $a['CantidadSolicitada'] = $item->CantidadSolicitada;
+                $a['CantidadRecibida'] = $item->suma;
                 $a['suma'] = $item->suma - $item->suma2;
+                $a['CantidadFaltante'] = $item->CantidadSolicitada - $item->suma;
 
             $this->listaSumatoriaBordado[] = $a;
             }
@@ -927,9 +934,12 @@ class PostPedido extends Component
     //Funcion para cancelar al entrar al modal Bordado
     public function cancelarAsignacion() {
         $this->confirmingBordado = false; 
+        $this->estadoInputPedidoExternoAsociado = 0;
         $this->reset([
             'listaSumatoriaBordado', 'pedidoAsociadoBordado', 'listaBordado', 'tipoBordado', 'codigoModeloBordado', 'tallaBordado', 'colorBordado', 'personaBordado', 'cantidadPrendaBordado', 'fechaPedidoExternoBordado'
         ]);
+        //session()->flash('message', 'La auditoria ha sido actulizada exitosamente');
+
     }
 
     //Funcion para agregar al arreglo bordado
@@ -1006,12 +1016,14 @@ class PostPedido extends Component
                     'FK_RecepcionDetalle'                      => $item['idRecepcionDetalle'],
                     'EstadoPersona'                            => "ASIGNADO",
                     'FK_DocumentoExterno1'                     => $this->pedidoAsociadoBordado,
+                    'FechaAsignado'                            => $this->todayDate,
 
                     ]);           
             }
             $this->reset([
                 'pedidoAsociadoBordado', 'listaBordado', 'listaSumatoriaBordado',
             ]);
+            $this->estadoInputPedidoExternoAsociado = 0;
             $this->confirmingBordado = false;
         }
 

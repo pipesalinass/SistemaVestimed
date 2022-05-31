@@ -8,7 +8,7 @@
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div class="m-3">
             <!-- Content Header (Page header) -->
-            <div class="content-header border-bottom border-success ">
+            <div class="content-header border-bottom border-primary ">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-4 mb-2">
@@ -48,7 +48,7 @@
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
-        <section class="content mt-3 border-bottom border-success">
+        <section class="content mt-3 border-bottom border-primary">
             <div class="container-fluid">
                 <!-- /.row -->
                 <div class="row">
@@ -232,7 +232,7 @@
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div class="m-3">
             <!-- Content Header (Page header) -->
-            <div class="content-header border-bottom border-success ">
+            <div class="content-header border-bottom border-primary ">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-4 mb-2">
@@ -265,7 +265,7 @@
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
-        <section class="content mt-3 border-bottom border-success">
+        <section class="content mt-3 border-bottom border-primary">
             <div class="container-fluid">
                 <!-- /.row -->
                 <div class="row">
@@ -989,7 +989,7 @@
                 <div class="parent-grid-row-1">
                     <div class="form-group">
                         <label for="fecPrincipal">Fecha Ingreso:</label>
-                        <input wire:model="todayDate" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
+                        <input wire:model="fechaCreacion" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
                             readonly>
                     </div>
                     <!-- Nombre -->
