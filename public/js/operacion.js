@@ -212,6 +212,39 @@ $(document).ready(function () {
    $('[data-toggle="mensaje"]').tooltip()
 });
 
+$(document).ready(function(){
+    window.addEventListener('abrirMsjeFallido14', event => {
+        document.getElementById("mensajeCrudErrorPersonas14").textContent  = event.detail.error; 
+        document.getElementById("alertaCrudErrorPersonas14").style.display = "block";
+    })
+    $(document).on('click', '#cerrarAlertCrudErrorPersonas14', function(e){
+        e.preventDefault();
+        document.getElementById("mensajeCrudErrorPersonas14").textContent  = ''; 
+        document.getElementById("alertaCrudErrorPersonas14").style.display = "none";
+    });
+});
+
+$(document).ready(function () {
+   $('[data-toggle="mensaje"]').tooltip()
+});
+
+$(document).ready(function(){
+    window.addEventListener('abrirMsjeFallido15', event => {
+        document.getElementById("mensajeCrudErrorPersonas15").textContent  = event.detail.error; 
+        document.getElementById("alertaCrudErrorPersonas15").style.display = "block";
+    })
+    $(document).on('click', '#cerrarAlertCrudErrorPersonas15', function(e){
+        e.preventDefault();
+        document.getElementById("mensajeCrudErrorPersonas15").textContent  = ''; 
+        document.getElementById("alertaCrudErrorPersonas15").style.display = "none";
+    });
+});
+
+
+$(document).ready(function () {
+   $('[data-toggle="mensaje"]').tooltip()
+});
+
 
 // get elements
 var parent = document.querySelector('.parent');

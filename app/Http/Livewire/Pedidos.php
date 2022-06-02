@@ -1517,13 +1517,15 @@ class Pedidos extends Component
     }
 
     public function AgregaVinculacion()
-    {
+    {     
         $count = 0;
         $modelo = ManModelo::where('ModeloId', '=', $this->seleccionados)->first();
         $color = ManColor::where('ColorId', '=', $this->seleccionadosColor)->first();
-        $nombreModelo = $modelo->ModNombre;
-        $codigo = $modelo->ModCodigo;
-        $nombreColor = $color->ColNombre;
+        if ($modelo != null && $color != null) {
+            $nombreModelo = $modelo->ModNombre;
+            $codigo = $modelo->ModCodigo;
+            $nombreColor = $color->ColNombre;
+        }
         foreach ($this->listaVinculacion as $item) {
             if ($this->seleccionados == $item['FK_Modelo']) {
                 if ($this->seleccionadosColor == $item['FK_Color']) {

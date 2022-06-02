@@ -380,6 +380,23 @@ class PostPedido extends Component
 
             $this->listaTipoBordado[] = $a;                
             }
+            $cantidad = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
+                ->where('FK_DocumentoExterno1', '=', $pedidoAsociadoBordado_form)
+                ->first();
+            $cantidad = $cantidad->suma;
+
+            $listado = ManTallajePersona::select(['man_tallaje_personas.*',DB::raw('count(*) as total'), 'op_pedidos_personas.*', 'man_modelos.*', 'op_pedidos_modelos.*', DB::raw('sum(cantidadPrenda) as suma'), 'man_pedidos_externos.*'])
+               ->leftjoin('op_pedidos_personas', 'man_tallaje_personas.FK_PedidoPersona', '=', 'op_pedidos_personas.PedidoPersonaId')
+               ->leftjoin('op_pedidos_modelos', 'man_tallaje_personas.FK_PedidoModelo', '=', 'op_pedidos_modelos.id')
+               ->leftjoin('man_modelos', 'op_pedidos_modelos.FK_Modelo', '=', 'man_modelos.ModeloId')
+               ->leftjoin('man_pedidos_externos', 'op_pedidos_personas.FK_pedido', '=', 'man_pedidos_externos.FK_Pedido')
+               ->where('man_pedidos_externos.NumPedidoExterno', '=', $pedidoAsociadoBordado_form)
+               ->first();
+
+               if ($cantidad == $listado->suma) {
+                $errorCode = 'Este pedido ya asignó todas sus prendas';
+                $this->dispatchBrowserEvent('abrirMsjeFallido14', ['error' => $errorCode]);
+            }   
         }                                                    
     }    
 
@@ -1004,6 +1021,10 @@ class PostPedido extends Component
         //dd($this);
         try {
 
+            if($this->pedidoAsociadoBordado == null) {
+                $errorCode = 'Debe seleccionar un pedido antes de asignar prendas';
+                $this->dispatchBrowserEvent('abrirMsjeFallido15', ['error' => $errorCode]);
+            }
         if (count($this->listaBordado) > 0) {
             foreach ($this->listaBordado as $item) {
                 PrendaPersona::create([
@@ -1269,26 +1290,11 @@ class PostPedido extends Component
                                             
         $pedidosAsociadosBordado = RecepcionDetalle::groupBy('FK_DocumentoExterno')->get();
         foreach($pedidosAsociadosBordado as $item) {
-            $cantidad = PrendaPersona::select('prenda_personas.*', DB::raw('sum(CantidadPersona) as suma'))
-                                     ->where('FK_DocumentoExterno1', '=', $item->FK_DocumentoExterno)
-                                     ->first();
-            $cantidad = $cantidad->suma;
-
-            $listado = ManTallajePersona::select(['man_tallaje_personas.*',DB::raw('count(*) as total'), 'op_pedidos_personas.*', 'man_modelos.*', 'op_pedidos_modelos.*', DB::raw('sum(cantidadPrenda) as suma'), 'man_pedidos_externos.*'])
-                                        ->leftjoin('op_pedidos_personas', 'man_tallaje_personas.FK_PedidoPersona', '=', 'op_pedidos_personas.PedidoPersonaId')
-                                        ->leftjoin('op_pedidos_modelos', 'man_tallaje_personas.FK_PedidoModelo', '=', 'op_pedidos_modelos.id')
-                                        ->leftjoin('man_modelos', 'op_pedidos_modelos.FK_Modelo', '=', 'man_modelos.ModeloId')
-                                        ->leftjoin('man_pedidos_externos', 'op_pedidos_personas.FK_pedido', '=', 'man_pedidos_externos.FK_Pedido')
-                                        ->where('man_pedidos_externos.NumPedidoExterno', '=', $item->FK_DocumentoExterno)
-                                        ->first();
-            $listado = $listado->suma;
-            if ($cantidad != $listado) {
-                if(array_search($item->FK_DocumentoExterno, array_column($this->listaPedidos, 'nombre')) === false) {
-                    $a = array();
-                    $a['nombre'] = $item->FK_DocumentoExterno;
-                    
-                    $this->listaPedidos[] = $a;                
-                }
+            if(array_search($item->FK_DocumentoExterno, array_column($this->listaPedidos, 'nombre')) === false) {
+                $a = array();
+                $a['nombre'] = $item->FK_DocumentoExterno;
+                
+                $this->listaPedidos[] = $a;                
             }
         }
         $recepcionDetalle = RecepcionDetalle::where('FK_Pedido', '=', $this->FK_Pedido)

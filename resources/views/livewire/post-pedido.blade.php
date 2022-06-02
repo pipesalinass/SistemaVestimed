@@ -925,6 +925,26 @@
                             </button>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
+                            role="alert" id="alertaCrudErrorPersonas14" style="display: none;">
+                            <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas14"></span>
+                            <button type="button" class="close" aria-label="Close"
+                                id="cerrarAlertCrudErrorPersonas14">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                                        <div class="form-row">
+                        <div class="col-md-12 alert alert-danger alert-dismissible fade show text-center mt-2"
+                            role="alert" id="alertaCrudErrorPersonas15" style="display: none;">
+                            <strong>Wow!</strong> <span id="mensajeCrudErrorPersonas15"></span>
+                            <button type="button" class="close" aria-label="Close"
+                                id="cerrarAlertCrudErrorPersonas15">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
                     <!-- Información factura -->
                     <!-- Table row -->
                     @if ($this->estadoInputPedidoExternoAsociado == 1)

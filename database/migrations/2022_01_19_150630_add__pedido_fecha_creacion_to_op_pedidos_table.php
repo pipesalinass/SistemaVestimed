@@ -14,7 +14,7 @@ class AddPedidoFechaCreacionToOpPedidosTable extends Migration
     public function up()
     {
         Schema::table('op_pedidos', function (Blueprint $table) {
-            $table->string('PedidoFechaCreacion');        
+            $table->date('PedidoFechaCreacion');        
         
         });
     }

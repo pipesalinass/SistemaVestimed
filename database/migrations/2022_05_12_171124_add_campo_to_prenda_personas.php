@@ -14,10 +14,10 @@ class AddCampoToPrendaPersonas extends Migration
     public function up()
     {
         Schema::table('prenda_personas', function (Blueprint $table) {
-            $table->string('FechaAsignado');
-            $table->string('FechaBordado');
-            $table->string('FechaRecibeBordado');
-            $table->string('FechaEntregado');
+            $table->date('FechaAsignado')->nullable();
+            $table->date('FechaBordado')->nullable();
+            $table->date('FechaRecibeBordado')->nullable();
+            $table->date('FechaEntregado')->nullable();
         });
     }
 
