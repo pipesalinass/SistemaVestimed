@@ -719,15 +719,17 @@ class Pedidos extends Component
     public function confirmPedidoAdd()
     {
         
-        $this->reset('listaPersona');
+        $this->reset('listaPersona', 'universidadPedido', 'carreraPedido', 'pNombrePedidoPersona', 'sNombrePedidoPersona', 'pApellidoPedidoPersona', 'sApellidoPedidoPersona', 'rutPedidoPersona', 'mailPedidoPersona', 'celularPedidoPersona');
         $this->nombrePedido = auth()->user()->name;
         $this->celularPedido = auth()->user()->NumeroContacto;
         $this->tituloPedido = "";
         $this->descripcionPedido = "";
+        $this->fechaCreacion = $this->todayDate;
         $this->reset(['pedido']);
         $this->confirmingPedidoAdd = true;
         $this->confirmingTallajeAdd = false;
         $this->confirmingModeloAdd = false;
+
     }
 
     //Funcion para editar una Pedido
@@ -762,6 +764,7 @@ class Pedidos extends Component
         $this->celularPedido = $persona->NumeroContacto;
         $this->tituloPedido = $pedido->PedTitulo;
         $this->descripcionPedido = $pedido->PedDescripcion;
+        $this->fechaCreacion = date('Y-m-d', strtotime($pedido->PedidoFechaCreacion));
         $this->idPedido = $pedido->PedidoId;
 
         $listado = OpPedidosPersona::where('FK_pedido', '=', $pedido->PedidoId)->get();
@@ -1008,6 +1011,7 @@ class Pedidos extends Component
         $this->celularPedido = $persona->NumeroContacto;
         $this->tituloPedido = $pedido->PedTitulo;
         $this->descripcionPedido = $pedido->PedDescripcion;
+        $this->fechaCreacion = date('Y-m-d', strtotime($pedido->PedidoFechaCreacion));
 
         $listado = ManTallajePersona::select(['man_tallaje_personas.*',DB::raw('count(*) as total'), 'op_pedidos_personas.*', 'man_modelos.*', 'op_pedidos_modelos.*',DB::raw('sum(cantidadPrenda) as suma')] )
                                     ->leftjoin('op_pedidos_personas', 'man_tallaje_personas.FK_PedidoPersona', '=', 'op_pedidos_personas.PedidoPersonaId')

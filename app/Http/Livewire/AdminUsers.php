@@ -142,11 +142,12 @@ class AdminUsers extends Component
         
     }
 
-    public function inactivarPersona ($id) {
-        
-        //$persona = User::where('id', '=', $id)->first();
+    public function desactivarUsuario ($id) {
         User::where('id', '=', $id)->update(['EstadoContacto'=>'Inactivo']);
+    }
 
+    public function activarUsuario ($id) {
+        User::where('id', '=', $id)->update(['EstadoContacto'=>'Activo']);
     }
 
     public function editPersona(User $user) {
@@ -169,10 +170,18 @@ class AdminUsers extends Component
 
     public function render()
     {
-        $users = User::where('name', 'LIKE', '%'. $this->search . '%')
-                    ->orWhere('email', 'LIKE', '%'. $this->search . '%')
-                    ->orderBy($this->sort, $this->direction)
-                    ->paginate(5);
+        $user = User::where('id', auth()->user()->id)->with('roles')->first();
+        $roles = $user->getRoleNames()->first();
+        if($roles == "SuperAdministrador") {
+            $users = User::where('name', 'LIKE', '%'. $this->search . '%')
+            ->orWhere('email', 'LIKE', '%'. $this->search . '%')
+            ->orderBy($this->sort, $this->direction)
+            ->paginate(5);
+        } else {
+            $users = User::where('EstadoContacto', '=', 'Activo')
+            ->orderBy($this->sort, $this->direction)
+            ->paginate(5);
+        }
         return view('livewire.admin-users',compact('users'));
     }
 

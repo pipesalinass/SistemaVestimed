@@ -1,6 +1,8 @@
+@if (auth()->user()->EstadoContacto == "Activo")
+@can('Ver usuarios')
 @extends('adminlte::page')
 
-@section('title', 'Sistema Otec')
+@section('title', 'Sistema Vestimed')
 
 @section('content_header')
     <h1>Lista de usuarios</h1>
@@ -19,3 +21,5 @@
 @section('js')
     <script> console.log('Hi!'); </script>
 @stop
+@endcan
+@endif

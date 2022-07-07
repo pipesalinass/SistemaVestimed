@@ -1,3 +1,4 @@
+@if (auth()->user()->EstadoContacto == "Activo")
 @can('Ver pedidos admin')
 @if(session('success'))
 <div class="alert alert-success">
@@ -80,7 +81,7 @@
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
                                 id="enTallajeClick"
-                                wire:click="changeEstado('EN TALLAJE')"><i class="far fa-file"></i></span>
+                                wire:click="changeEstado('EN TALLAJE')"><i class="fas fa-tasks text-white"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">En Tallaje</span>
                                 <span class="info-box-number" id="enTallaje">{{$en_tallaje}}</span>
@@ -136,7 +137,7 @@
                                         <th Colspan="1">Acción</th>
                                         <th>
                                             <button wire:click="sortBy('PedidoId')">
-                                                Número de pedido
+                                                Número de Pedido
                                             </button>
                                         </th>
                                         <th>
@@ -433,6 +434,9 @@
 <x-dialog-modal-general wire:model="confirmingPedidoAdd" >
     <x-slot name="title" style="background: #2c3b4a; color:white">
         {{ isset($this->pedido->PedidoId) ? 'Editar Pedido' : 'Formulario Pedido' }}
+        <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingPedidoAdd', false)" aria-label="Close"
+        style="color:white">
+        <span aria-hidden="true">&times;</span>
     </x-slot>
 
     <x-slot name="content">
@@ -444,7 +448,7 @@
                 <div class="parent-grid-row-1">
                     <div class="form-group">
                         <label for="fecPrincipal">Fecha Ingreso:</label>
-                        <input wire:model="todayDate" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
+                        <input wire:model="fechaCreacion" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
                             readonly>
                     </div>
                     <!-- Nombre -->
@@ -978,6 +982,9 @@
 <x-dialog-modal-general wire:model="confirmingPedidoView" >
     <x-slot name="title" style="background: #2c3b4a; color:white">
         {{ __('Visualización Pedido') }}
+        <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingPedidoView', false)" aria-label="Close"
+        style="color:white">
+        <span aria-hidden="true">&times;</span>
     </x-slot>
 
     <x-slot name="content">
@@ -1178,6 +1185,9 @@
 <x-jet-dialog-modal wire:model="confirmingModeloAdd">
     <x-slot name="title">
         {{ __('Modelo y Color') }}
+        <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingModeloAdd', false)" aria-label="Close"
+        style="color:navy">
+        <span aria-hidden="true">&times;</span>
     </x-slot>
 
     <x-slot name="content">
@@ -1466,6 +1476,9 @@
 <x-dialog-modal-general wire:model="confirmingTallajePersonasAdd">
     <x-slot name="title">
         {{ __('Tallaje Personas') }}
+        <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingTallajePersonasAdd', false)" aria-label="Close"
+        style="color:white">
+        <span aria-hidden="true">&times;</span>
     </x-slot>
 
     <x-slot name="content">
@@ -1570,6 +1583,9 @@
 <x-dialog-modal-general wire:model="confirmingTallajeAdd">
     <x-slot name="title">
         {{ __('Tallaje Persona') }}
+        <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingTallajeAdd', false)" aria-label="Close"
+        style="color:white">
+        <span aria-hidden="true">&times;</span>
     </x-slot>
 
     <x-slot name="content">
@@ -1738,6 +1754,9 @@
 <x-dialog-modal-general wire:model="confirmingSumatoria">
     <x-slot name="title">
         {{ __('Sumatoria Pedido') }}
+        <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingSumatoria', false)" aria-label="Close"
+        style="color:white">
+        <span aria-hidden="true">&times;</span>
     </x-slot>
 
     <x-slot name="content">
@@ -1750,7 +1769,7 @@
                 <div class="parent-grid-row-1">
                     <div class="form-group">
                         <label for="fecPrincipal">Fecha Ingreso:</label>
-                        <input wire:model="todayDate" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
+                        <input wire:model="fechaCreacion" type="date" class="form-control float-right" id="fecPrincipal" name="fecPrincipal"
                             readonly>
                     </div>
                     <!-- Nombre -->
@@ -2284,3 +2303,5 @@
 
 </x-jet-dialog-modal>
 <!-- Edit Pedido Externo Modal -->
+
+@endif

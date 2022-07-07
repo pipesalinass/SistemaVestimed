@@ -63,7 +63,7 @@ class PDFController extends Controller
         }
 
         $this->pedido = $pedido;
-        $this->fecha = date('Y-m-d');;
+        $this->fecha = $pedido->PedidoFechaCreacion;
         $this->nombrePedido = $persona->name;
         $this->celularPedido = $persona->NumeroContacto;
         $this->tituloPedido = $pedido->PedTitulo;
@@ -98,7 +98,7 @@ class PDFController extends Controller
         }
         
         $datos = [
-            'fecha' => date('m/d/Y'),
+            'fecha'                     => $this->fecha,
             'nombrePedido'              => $this->nombrePedido,
             'celularPedido'             => $this->celularPedido,
             'tituloPedido'              => $this->tituloPedido,

@@ -589,7 +589,7 @@ class PostPedido extends Component
 
         $this->tituloPedido = "";
         $this->descripcionPedido = "";
-        $this->reset(['pedido','estadoBotonGuardarCabeceraRecepcion']);
+        $this->reset(['pedido','estadoBotonGuardarCabeceraRecepcion', 'pedidoAsociado', 'fechaPedidoExterno', 'numeroFactura', 'observacionfactura']);
         $this->confirmingPostPedidoAdd = true;
     }
 
@@ -946,6 +946,11 @@ class PostPedido extends Component
 
     public function confirmBordadoAdd() {
         $this->confirmingBordado = true;
+        $this->estadoInputPedidoExternoAsociado = 0;
+        $this->reset([
+            'pedidoAsociadoBordado', 'listaBordado', 'tipoBordado', 'codigoModeloBordado', 'tallaBordado', 'colorBordado', 'personaBordado', 'cantidadPrendaBordado', 'fechaPedidoExternoBordado'
+        ]);
+        
     }
         
     //Funcion para cancelar al entrar al modal Bordado

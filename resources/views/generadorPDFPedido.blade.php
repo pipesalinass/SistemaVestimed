@@ -64,7 +64,7 @@
                 <td style="width: 200px;color:#015696;font: normal 11pt century-gothic, sans-serif;">Celular </td>
             </tr>
             <tr>
-                <td style="width: 200px;font: normal 10pt century-gothic, sans-serif;"><strong>{{$fecha}}</strong></td>
+                <td style="width: 200px;font: normal 10pt century-gothic, sans-serif;"><strong>{{date('d-m-Y', strtotime($fecha))}}</strong></td>
                 <td style="width: 200px;font: normal 10pt century-gothic, sans-serif;"><strong>{{$nombrePedido}}</strong>
                 <td style="width: 200px;font: normal 10pt century-gothic, sans-serif;"><strong>{{$celularPedido}}</strong>
                 </td>

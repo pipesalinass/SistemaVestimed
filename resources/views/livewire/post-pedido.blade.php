@@ -1,5 +1,6 @@
 <div>
 
+    @if (auth()->user()->EstadoContacto == "Activo")
 
     @can('Ver pedidos admin')
         @if (session('success'))
@@ -79,7 +80,7 @@
                                             id="parcialClick" wire:click="changeEstado('RECEPCION_PARCIAL')"><i
                                                 class="far fa-file"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Recepcion parcial</span>
+                                            <span class="info-box-text">Recepcion Parcial</span>
                                             <span class="info-box-number" id="parcial">{{ $recepcion_parcial }}</span>
                                         </div>
                                         <!-- /.info-box-content -->
@@ -91,7 +92,7 @@
                                             id="finalizadaClick" wire:click="changeEstado('RECEPCION_FINALIZADA')"><i
                                                 class="far fa-thumbs-up"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Recepcion finalizada</span>
+                                            <span class="info-box-text">Recepcion Finalizada</span>
                                             <span class="info-box-number" id="finalizada">{{ $recepcion_finalizada }}</span>
                                         </div>
                                         <!-- /.info-box-content -->
@@ -101,9 +102,9 @@
                                     <div class="info-box mb-3">
                                         <span class="info-box-icon bg-primary elevation-1" style="cursor:pointer"
                                             id="enBordadoClick" wire:click="changeEstado('EN BORDADO')"><i
-                                                class="far fa-file"></i></span>
+                                                class="fas fa-tshirt"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">En bordado</span>
+                                            <span class="info-box-text">En Bordado</span>
                                             <span class="info-box-number" id="enBordado">{{ $en_bordado }}</span>
                                         </div>
                                         <!-- /.info-box-content -->
@@ -116,9 +117,9 @@
                                         <span class="info-box-icon bg-info elevation-1" style="cursor:pointer"
                                             id="CerradosClick" id="recibeBordadoClick"
                                             wire:click="changeEstado('RECIBE DE BORDADO')"><i
-                                                class="fas fa-cog"></i></span>
+                                                class="fas fa-tshirt"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Recibe de bordado</span>
+                                            <span class="info-box-text">Recibe de Bordado</span>
                                             <span class="info-box-number" id="recibeBordado">{{ $recibe_de_bordado }}</span>
                                         </div>
                                         <!-- /.info-box-content -->
@@ -131,7 +132,7 @@
                                     <div class="info-box mb-3">
                                         <span class="info-box-icon bg-info elevation-1" style="cursor:pointer"
                                             id="CerradosClick" id="entregadoClick" wire:click="changeEstado('ENTREGADO')"><i
-                                                class="fas fa-cog"></i></span>
+                                                class="fas fa-truck"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Entregado</span>
                                             <span class="info-box-number" id="entregado">{{ $entregado }}</span>
@@ -152,7 +153,7 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="card-title col-5">Pedidos Realizados</h3>
+                                            <h3 class="card-title col-5">Recepciones Realizadas</h3>
                                             <div class="card-tools col-6" style="display: flex; justify-content: flex-end;">
                                                 <div class="input-group input-group-sm col-10">
                                                     <input type="text" name="table_search" class="form-control float-right"
@@ -176,37 +177,37 @@
                                                             <th Colspan="1">Acción</th>
                                                             <th>
                                                                 <button wire:click="sortBy('FechaRecepcion')"
-                                                                    style="font-weight:bold;">
+                                                                    >
                                                                     Fecha Recepción
                                                                 </button>
                                                             </th>
                                                             <th>
                                                                 <button wire:click="sortBy('NumeroDocumentoExterno')"
-                                                                    style="font-weight:bold;">
-                                                                    Número documento externo
+                                                                    >
+                                                                    Número Documento Externo
                                                                 </button>
                                                             </th>
                                                             <th>
                                                                 <button wire:click="sortBy('NumeroFactura')"
-                                                                    style="font-weight:bold;">
-                                                                    Número factura
+                                                                    >
+                                                                    Número Factura
                                                                 </button>
                                                             </th>
                                                             <th>
                                                                 <button wire:click="sortBy('FechaDocumentoExterno')"
-                                                                    style="font-weight:bold;">
-                                                                    Fecha documento externo
+                                                                    >
+                                                                    Fecha Documento Externo
                                                                 </button>
                                                             </th>
                                                             <th>
                                                                 <button wire:click="sortBy('Observacion')"
-                                                                    style="font-weight:bold;">
+                                                                    >
                                                                     Observación
                                                                 </button>
                                                             </th>
                                                             <th>
                                                                 <button wire:click="sortBy('Estado')"
-                                                                    style="font-weight:bold;">
+                                                                    >
                                                                     Estado
                                                                 </button>
                                                             </th>
@@ -343,7 +344,7 @@
                                                 id="parcialClick1" wire:click="changeEstado1('RECEPCION_PARCIAL')"><i
                                                     class="far fa-file"></i></span>
                                             <div class="info-box-content">
-                                                <span class="info-box-text">Recepcion parcial</span>
+                                                <span class="info-box-text">Recepcion Parcial</span>
                                                 <span class="info-box-number"
                                                     id="parcial1">{{ $recepcion_parcial1 }}</span>
                                             </div>
@@ -357,7 +358,7 @@
                                                 wire:click="changeEstado1('RECEPCION_FINALIZADA')"><i
                                                     class="far fa-thumbs-up"></i></span>
                                             <div class="info-box-content">
-                                                <span class="info-box-text">Recepcion finalizada</span>
+                                                <span class="info-box-text">Recepcion Finalizada</span>
                                                 <span class="info-box-number"
                                                     id="finalizada1">{{ $recepcion_finalizada1 }}</span>
                                             </div>
@@ -370,7 +371,7 @@
                                                 id="enBordadoClick1" wire:click="changeEstado1('EN BORDADO')"><i
                                                     class="far fa-file"></i></span>
                                             <div class="info-box-content">
-                                                <span class="info-box-text">En bordado</span>
+                                                <span class="info-box-text">En Bordado</span>
                                                 <span class="info-box-number" id="enBordado1">{{ $en_bordado1 }}</span>
                                             </div>
                                             <!-- /.info-box-content -->
@@ -385,7 +386,7 @@
                                                 wire:click="changeEstado1('RECIBE BORDADO')"><i
                                                     class="fas fa-cog"></i></span>
                                             <div class="info-box-content">
-                                                <span class="info-box-text">Recibe de bordado</span>
+                                                <span class="info-box-text">Recibe de Bordado</span>
                                                 <span class="info-box-number"
                                                     id="recibeBordado1">{{ $recibe_de_bordado1 }}</span>
                                             </div>
@@ -400,7 +401,7 @@
                                             <span class="info-box-icon bg-info elevation-1" style="cursor:pointer"
                                                 id="CerradosClick" id="entregadoClick1"
                                                 wire:click="changeEstado1('ENTREGADO')"><i
-                                                    class="fas fa-cog"></i></span>
+                                                    class="fas fa-truck"></i></span>
                                             <div class="info-box-content">
                                                 <span class="info-box-text">Entregado</span>
                                                 <span class="info-box-number" id="entregado1">{{ $entregado1 }}</span>
@@ -421,7 +422,7 @@
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="card-title col-5">Pedidos Realizados</h3>
+                                                <h3 class="card-title col-5">Recepciones Realizadas</h3>
                                                 <div class="card-tools col-6"
                                                     style="display: flex; justify-content: flex-end;">
                                                     <div class="input-group input-group-sm col-10">
@@ -519,6 +520,9 @@
             <x-dialog-modal-general wire:model="confirmingPostPedidoAdd">
                 <x-slot name="title">
                     {{ __('Recepción Documento') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingPostPedidoAdd', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -687,6 +691,9 @@
             <x-dialog-modal-general wire:model="confirmingRecepcionDetalle">
                 <x-slot name="title">
                     {{ __('Detalle Recepción') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingRecepcionDetalle', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -753,6 +760,9 @@
             <x-dialog-modal-general wire:model="confirmingDetalleEdit">
                 <x-slot name="title">
                     {{ __('Insertar Cantidad Recibida') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingDetalleEdit', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -804,6 +814,9 @@
             <x-dialog-modal-general wire:model="confirmingMostrarRecepcion">
                 <x-slot name="title">
                     {{ __('Recepción') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingMostrarRecepcion', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -866,6 +879,9 @@
             <x-dialog-modal-general wire:model="confirmingBordado">
                 <x-slot name="title">
                     {{ __('Asignación') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingBordado', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -1194,6 +1210,9 @@
             <x-dialog-modal-general wire:model="confirmingPrendaPersona">
                 <x-slot name="title">
                     {{ __('Prendas asociadas a Personas') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingPrendaPersona', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -1307,6 +1326,9 @@
             <x-dialog-modal-general wire:model="confirmingEstadoPrendaPersona">
                 <x-slot name="title">
                     {{ __('Información Prenda-Persona') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingEstadoPrendaPersona', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -1353,6 +1375,9 @@
             <x-dialog-modal-general wire:model="confirmingPrendaPersonaCliente">
                 <x-slot name="title">
                     {{ __('Información Pedido') }}
+                    <button type="button" class="ml-2 mb-1 close" wire:click="$toggle('confirmingPrendaPersonaCliente', false)" aria-label="Close"
+                    style="color:white">
+                    <span aria-hidden="true">&times;</span>
                 </x-slot>
 
                 <x-slot name="content">
@@ -1409,5 +1434,6 @@
             </x-dialog-modal-general>
             <!-- PrendaPersona VISTA CLIENTE modal -->
 
+    @endif            
 
 </div>

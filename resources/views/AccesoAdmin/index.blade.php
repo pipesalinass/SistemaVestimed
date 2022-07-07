@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Sistema Otec')
+@section('title', 'Sistema Vestimed')
 
 @section('content_header')
     <h1>Sistema Vestimed</h1>
